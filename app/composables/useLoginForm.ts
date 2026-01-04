@@ -19,7 +19,6 @@ export const useLoginForm = () => {
   const handleSubmit = async (payload: FormSubmitEvent<LoginSchema>) => {
     const { login } = useAuth();
     const user = await login(payload.data);
-    console.log(user);
   };
   return {
     formFields,

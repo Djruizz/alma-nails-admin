@@ -9,6 +9,7 @@ export const useAuth = () => {
     if (error) {
       throw error;
     }
+    navigateTo("/");
     return user;
   };
   const logout = async () => {
@@ -16,6 +17,7 @@ export const useAuth = () => {
     if (error) {
       throw error;
     }
+    navigateTo("/login");
   };
 
   return {
