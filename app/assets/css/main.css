@@ -1,2 +1,16 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+
+@theme {
+  --color-pink-50: #FDF2F8;
+  --color-pink-100: #FCE7F3;
+  --color-pink-200: #FBCFE8;
+  --color-pink-300: #F9A8D4;
+  --color-pink-400: #F472B6;
+  --color-pink-500: #EC4899;
+  --color-pink-600: #DB2777;
+  --color-pink-700: #BE185D;
+  --color-pink-800: #9D174D;
+  --color-pink-900: #831843;
+}
