@@ -1,5 +1,8 @@
 <script setup lang="ts">
 </script>
 <template>
-  <slot></slot>
+  <UMain>
+    <slot></slot>
+    <NavbarsBottomNavigation />
+  </UMain>
 </template>
