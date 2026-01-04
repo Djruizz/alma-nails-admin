@@ -1,6 +1,6 @@
 <template>
   <UContainer>
-    <UHeader>
+    <UHeader :toggle="false">
       <template #title>
         <h1>Alma Nails</h1>
       </template>

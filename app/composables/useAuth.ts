@@ -1,6 +1,5 @@
 export const useAuth = () => {
   const client = useSupabaseClient();
-
   const login = async (data: LoginSchema) => {
     const { data: user, error } = await client.auth.signInWithPassword({
       email: data.email,
@@ -9,7 +8,6 @@ export const useAuth = () => {
     if (error) {
       throw error;
     }
-    navigateTo("/");
     return user;
   };
   const logout = async () => {

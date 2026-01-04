@@ -1,5 +1,6 @@
 import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
 export const useLoginForm = () => {
+  const toast = useToast();
   const formFields: AuthFormField[] = [
     {
       name: "email",
@@ -18,7 +19,21 @@ export const useLoginForm = () => {
   ];
   const handleSubmit = async (payload: FormSubmitEvent<LoginSchema>) => {
     const { login } = useAuth();
-    const user = await login(payload.data);
+
+    try {
+      const user = await login(payload.data);
+      toast.add({
+        title: '¡Éxito!',
+        color: 'success'
+      });
+      navigateTo("/");
+    } catch (error: any) {
+      toast.add({
+        title: "Error de autenticación",
+        description: error.data?.message || "Credenciales incorrectas",
+        color: "error",
+      });
+    }
   };
   return {
     formFields,
