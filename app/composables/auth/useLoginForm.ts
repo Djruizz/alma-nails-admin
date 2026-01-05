@@ -21,7 +21,7 @@ export const useLoginForm = () => {
     const { login } = useAuth();
 
     try {
-      const user = await login(payload.data);
+      await login(payload.data);
       toast.add({
         title: '¡Éxito!',
         color: 'success'

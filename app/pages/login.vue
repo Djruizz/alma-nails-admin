@@ -2,29 +2,23 @@
 definePageMeta({
   layout: "auth",
 });
-const { formFields, handleSubmit } = useLoginForm();
+const tabItems = [
+  { label: "Iniciar sesión", slot: "login", icon: "i-lucide-user" },
+  { label: "Registrarse", slot: "register", icon: "i-lucide-user-plus" },
+];
 </script>
 
 <template>
   <div class="p-4 flex flex-1 items-center justify-center">
-    <UPageCard class="w-full max-w-sm p-5">
-      <UAuthForm
-        title="¡Hola de nuevo!"
-        description="Ingresa tus credenciales"
-        icon="i-lucide-user"
-        :fields="formFields"
-        :schema="loginSchema"
-        :submit="{
-          label: 'Ingresar',
-        }"
-        @submit="handleSubmit"
-      >
-        <template #password-hint>
-          <ULink to="/" class="text-primary font-medium" tabindex="-1">
-            ¿Olvidaste tu contraseña?
-          </ULink>
+    <UPageCard class="w-full max-w-lg p-0">
+      <UTabs :items="tabItems" class="gap-4">
+        <template #login>
+          <AuthLoginForm />
         </template>
-      </UAuthForm>
+        <template #register>
+          <AuthRegisterForm />
+        </template>
+      </UTabs>
     </UPageCard>
   </div>
 </template>
