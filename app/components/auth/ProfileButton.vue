@@ -3,9 +3,13 @@ import { type DropdownMenuItem } from "@nuxt/ui";
 
 
 const { logout } = useAuth();
+const { profile, firstName, fetchProfile } = useProfile();
 
+onMounted(() => {
+  fetchProfile();
+});
 const userItems = ref<DropdownMenuItem[]>([
-  [{ label: 'email', icon: "i-lucide-user", type: "label" }],
+  [{ label: firstName || "", icon: "i-lucide-user", type: "label" }],
   [
     { label: "Account settings", icon: "i-lucide-settings", value: "settings" },
     {

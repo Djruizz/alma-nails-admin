@@ -1,9 +1,6 @@
 <script setup lang="ts">
 const { logout } = useAuth();
-const { fetchProfile } = useProfile();
-onMounted(() => {
-  fetchProfile();
-});
+
 </script>
 <template>
   <div>
