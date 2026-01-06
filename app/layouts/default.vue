@@ -6,7 +6,7 @@
       <AuthProfileButton />
     </template>
   </UHeader>
-  <UMain>
+  <UMain class="mb-16">
     <slot></slot>
   </UMain>
   <NavbarsBottomNavigation />

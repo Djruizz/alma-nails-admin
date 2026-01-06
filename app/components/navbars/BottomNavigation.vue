@@ -2,13 +2,19 @@
 const route = useRoute();
 const { mobileMenu } = useNavigation();
 
-const isActive = (path: string) => route.path.startsWith(path);
-const activeIndex = computed(() =>
-  mobileMenu.findIndex((i) => route.path.startsWith(i.to))
-);
+const isActive = (path: string) => {
+  if (path === "/") {
+    return route.path === "/";
+  }
+  return route.path.startsWith(path);
+};
+const activeIndex = computed(() => {
+  return mobileMenu.findIndex((i) => isActive(i.to));
+});
 
-const left = computed(() =>
-  `calc(
+const left = computed(
+  () =>
+    `calc(
     (${activeIndex.value} * (100% / ${mobileMenu.length}))
     + ((100% / ${mobileMenu.length} - (100% / ${mobileMenu.length} * 0.1)) / 2)
   )`
@@ -18,7 +24,7 @@ const width = computed(() => `calc(100% / ${mobileMenu.length} *0.1)`);
 </script>
 <template>
   <nav
-    class="fixed bottom-0 left-0 right-0 bg-neutral z-50 backdrop-blur border h-16 m-5 rounded-xl"
+    class="fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-900 z-50 border h-16 m-5 rounded-xl"
   >
     <div class="relative w-full z-10 h-full flex justify-around items-center">
       <div
