@@ -1,4 +1,4 @@
-import type { Profile } from "@/types/profile.types";
+import type { Profile, ProfileUpdate } from "@/types/profile.types";
 
 export const useProfile = () => {
   const user = useSupabaseUser();
@@ -14,8 +14,21 @@ export const useProfile = () => {
       profile.value = res;
     } catch (e) {
       console.log(e);
+    } finally {
+      setLoading(false);
     }
-    finally {
+  };
+  const updateProfile = async (data: ProfileUpdate) => {
+    try {
+      setLoading(true);
+      const res: Profile | null = await $fetch("/api/profile", {
+        method: "PUT",
+        body: data,
+      });
+      profile.value = res;
+    } catch (e) {
+      console.log(e);
+    } finally {
       setLoading(false);
     }
   };
@@ -27,5 +40,10 @@ export const useProfile = () => {
     { immediate: true }
   );
   const firstName = computed(() => profile.value?.full_name?.split(" ")[0]);
-  return { profile, fetchProfile, firstName };
+  return {
+    profile,
+    firstName,
+    fetchProfile,
+    updateProfile,
+  };
 };
