@@ -27,6 +27,7 @@ watch(
 
 const hasChanges = computed(() => {
   if (!initialProfile.value) return false;
+  errors.value = {};
   return fields.some(
     (field) => profileState[field] !== initialProfile.value?.[field]
   );

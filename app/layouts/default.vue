@@ -9,7 +9,7 @@ const { isLoading } = useLoading();
     </template>
   </UHeader>
   <UMain class="mb-16">
-    <div v-if="isLoading" class="flex items-center justify-center py-12">
+    <div v-if="isLoading" class="fixed inset-0 flex items-center justify-center">
       <UIcon
         name="i-heroicons-arrow-path"
         class="w-8 h-8 animate-spin text-primary"
