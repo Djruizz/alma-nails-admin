@@ -1,33 +1,71 @@
 <script setup lang="ts">
-import type { ProfileInsert } from "@/types/profile.types";
-// const profile = ref({
-//   name: "Admin Alma Nails",
-//   email: "admin@almanails.com",
-//   phone: "55 1234 5678",
-//   username: "admin_alma",
-//   avatar: "https://avatars.githubusercontent.com/u/739984?v=4",
-//   bio: "Administrador principal del sistema.",
-// });
-const {profile} = useProfile()
+import type { ProfileFormSchema } from "@/utils/schemas/ProfileFormSchema";
+import type { ZodError } from "zod";
+const { profile, updateProfile } = useProfile();
+const toast = useToast();
 
-const profileState = reactive<ProfileInsert>(profile.value || {
+const profileState = reactive<ProfileFormSchema>({
   full_name: "",
   email: "",
   phone: "",
-})
-watch(profile, (p) => {
-  if (!p) return
-  Object.assign(profileState, p)
-})
+});
+const initialProfile = ref<ProfileFormSchema | null>(null);
+const fields: (keyof ProfileFormSchema)[] = ["full_name", "email", "phone"];
 
-const toast = useToast();
-function saveProfile() {
+watch(
+  profile,
+  (p) => {
+    if (!p) return;
+    const profileData: ProfileFormSchema = {
+      full_name: p.full_name,
+      email: p.email,
+      phone: p.phone,
+    };
+    Object.assign(profileState, profileData);
+
+    initialProfile.value = { ...profileData };
+  },
+  { immediate: true }
+);
+
+const hasChanges = computed(() => {
+  if (!initialProfile.value) return false;
+  return fields.some(
+    (field) => profileState[field] !== initialProfile.value?.[field]
+  );
+});
+const reset = () => {
+  if (!initialProfile.value) return;
+  Object.assign(profileState, structuredClone(toRaw(initialProfile.value)));
+};
+
+const errors = ref<Record<string, string>>({});
+const setErrorsFromZod = (error: ZodError) => {
+  errors.value = {};
+  for (const issue of error.issues) {
+    const key = issue.path[0] as string;
+    errors.value[key] = issue.message;
+  }
+};
+
+const saveProfile = async () => {
+  if (!hasChanges.value) return;
+  const result = profileFormSchema.safeParse(profileState);
+
+  if (!result.success) {
+    setErrorsFromZod(result.error);
+    return;
+  }
+
+  await updateProfile(result.data);
+  initialProfile.value = structuredClone(toRaw(profileState));
+
   toast.add({
     title: "Perfil actualizado",
     description: "Los cambios se han guardado correctamente.",
     icon: "i-heroicons-check-circle",
   });
-}
+};
 </script>
 <template>
   <UCard>
@@ -59,23 +97,40 @@ function saveProfile() {
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <UForm class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <UFormField label="Nombre Completo" required>
           <UInput
             v-model="profileState.full_name"
             class="w-full"
             icon="i-heroicons-user"
           />
+          <template #error v-if="errors.full_name">
+            <span>{{ errors.full_name }}</span>
+          </template>
         </UFormField>
 
         <UFormField label="Correo Electrónico" required>
-          <UInput v-model="profileState.email" class="w-full" icon="i-heroicons-envelope" />
+          <UInput
+            v-model="profileState.email"
+            class="w-full"
+            icon="i-heroicons-envelope"
+          />
+          <template #error v-if="errors.email">
+            <span>{{ errors.email }}</span>
+          </template>
         </UFormField>
 
         <UFormField label="Teléfono">
-          <UInput v-model="profileState.phone" class="w-full" icon="i-heroicons-phone" />
+          <UInput
+            v-model="profileState.phone"
+            class="w-full"
+            icon="i-heroicons-phone"
+          />
+          <template #error v-if="errors.phone">
+            <span>{{ errors.phone }}</span>
+          </template>
         </UFormField>
-      </div>
+      </UForm>
 
       <UFormField label="Biografía">
         <UTextarea v-model="profileState.phone" :rows="3" class="w-full" />
@@ -84,8 +139,19 @@ function saveProfile() {
 
     <template #footer>
       <div class="flex justify-end gap-3">
-        <UButton label="Cancelar" color="neutral" variant="ghost" />
-        <UButton label="Guardar Cambios" color="primary" @click="saveProfile" />
+        <UButton
+          label="Cancelar"
+          :disabled="!hasChanges"
+          color="neutral"
+          variant="ghost"
+          @click="reset"
+        />
+        <UButton
+          label="Guardar Cambios"
+          :disabled="!hasChanges"
+          color="primary"
+          @click="saveProfile"
+        />
       </div>
     </template>
   </UCard>
