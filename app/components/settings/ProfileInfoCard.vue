@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ProfileFormSchema } from "@/utils/schemas/ProfileFormSchema";
-import type { ZodError } from "zod";
 const { profile, updateProfile } = useProfile();
+const formRef = useTemplateRef("form");
 
 const profileState = reactive<ProfileFormSchema>({
   full_name: "",
@@ -27,7 +27,6 @@ watch(
 
 const hasChanges = computed(() => {
   if (!initialProfile.value) return false;
-  errors.value = {};
   return fields.some(
     (field) => profileState[field] !== initialProfile.value?.[field]
   );
@@ -36,23 +35,17 @@ const hasChanges = computed(() => {
 const reset = () => {
   if (!initialProfile.value) return;
   Object.assign(profileState, structuredClone(toRaw(initialProfile.value)));
-};
-
-const errors = ref<Record<string, string>>({});
-const setErrorsFromZod = (error: ZodError) => {
-  errors.value = {};
-  for (const issue of error.issues) {
-    const key = issue.path[0] as string;
-    errors.value[key] = issue.message;
+  if (formRef.value) {
+    formRef.value.errors = [];
   }
 };
 
 const saveProfile = async () => {
+  console.log(canSubmit.value);
   if (!hasChanges.value) return;
   const result = profileFormSchema.safeParse(profileState);
 
   if (!result.success) {
-    setErrorsFromZod(result.error);
     return;
   }
 
@@ -66,6 +59,13 @@ const createdDate = computed(() => {
     month: "long",
     day: "numeric",
   });
+});
+const canSubmit: Ref<boolean> = computed(() => {
+  if (!hasChanges.value) return false;
+  if (formRef.value) {
+    return formRef.value.errors.length === 0;
+  }
+  return false;
 });
 </script>
 <template>
@@ -101,29 +101,31 @@ const createdDate = computed(() => {
         </div>
       </div>
 
-      <UForm class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <UFormField label="Nombre Completo" required>
+      <UForm
+        ref="form"
+        class="grid grid-cols-1 md:grid-cols-2 gap-6"
+        :schema="profileFormSchema"
+        :state="profileState"
+        @submit="saveProfile"
+        :validate-on-input-delay="100"
+        
+      >
+        <UFormField label="Nombre Completo" required name="full_name">
           <UInput
             v-model="profileState.full_name"
             class="w-full"
             icon="i-heroicons-user"
             type="text"
           />
-          <template #error v-if="errors.full_name">
-            <span>{{ errors.full_name }}</span>
-          </template>
         </UFormField>
 
-        <UFormField label="Teléfono">
+        <UFormField label="Teléfono" name="phone">
           <UInput
             v-model="profileState.phone"
             class="w-full"
             icon="i-heroicons-phone"
             type="tel"
           />
-          <template #error v-if="errors.phone">
-            <span>{{ errors.phone }}</span>
-          </template>
         </UFormField>
       </UForm>
     </div>
@@ -132,16 +134,16 @@ const createdDate = computed(() => {
       <div class="flex justify-end gap-3">
         <UButton
           label="Cancelar"
-          :disabled="!hasChanges"
+          v-if="hasChanges"
           color="neutral"
           variant="ghost"
           @click="reset"
         />
         <UButton
           label="Guardar Cambios"
-          :disabled="!hasChanges"
+          :disabled="!canSubmit"
           color="primary"
-          @click="saveProfile"
+          @click="formRef?.submit()"
         />
       </div>
     </template>
