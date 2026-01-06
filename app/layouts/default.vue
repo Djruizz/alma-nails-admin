@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const { isLoading } = useLoading();
+</script>
 <template>
   <UHeader title="Alma Nails" :toggle="false">
     <template #right>
@@ -7,7 +9,15 @@
     </template>
   </UHeader>
   <UMain class="mb-16">
-    <slot></slot>
+    <div v-if="isLoading" class="flex items-center justify-center py-12">
+      <UIcon
+        name="i-heroicons-arrow-path"
+        class="w-8 h-8 animate-spin text-primary"
+      />
+    </div>
+    <div v-show="!isLoading">
+      <slot></slot>
+    </div>
   </UMain>
   <NavbarsBottomNavigation />
 </template>

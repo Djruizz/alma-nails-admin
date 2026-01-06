@@ -3,21 +3,26 @@ import type { Profile } from "@/types/profile.types";
 export const useProfile = () => {
   const user = useSupabaseUser();
   const profile = useState<Profile | null>("profile", () => null);
-  
+  const { setLoading } = useLoading();
   const fetchProfile = async () => {
     if (profile.value) return;
     try {
+      setLoading(true);
       const res: Profile | null = await $fetch("/api/profile", {
         method: "GET",
       });
       profile.value = res;
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
+    finally {
+      setLoading(false);
+    }
   };
   watch(
     () => user.value?.id,
     (id) => {
       if (id) fetchProfile();
-      else profile.value = null;
     },
     { immediate: true }
   );
