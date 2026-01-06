@@ -1,6 +1,8 @@
-import type { Profile, ProfileUpdate } from "@/types/profile.types";
+import type { Profile } from "@/types/profile.types";
+import type { ProfileFormSchema } from "@/utils/schemas/ProfileFormSchema";
 
 export const useProfile = () => {
+  const toast = useToast();
   const user = useSupabaseUser();
   const profile = useState<Profile | null>("profile", () => null);
   const { setLoading } = useLoading();
@@ -13,12 +15,17 @@ export const useProfile = () => {
       });
       profile.value = res;
     } catch (e) {
-      console.log(e);
+      toast.add({
+        title: "Error",
+        description: "Error al obtener el perfil",
+        color: "error",
+      });
+      throw e;
     } finally {
       setLoading(false);
     }
   };
-  const updateProfile = async (data: ProfileUpdate) => {
+  const updateProfile = async (data: ProfileFormSchema) => {
     try {
       setLoading(true);
       const res: Profile | null = await $fetch("/api/profile", {
@@ -27,7 +34,12 @@ export const useProfile = () => {
       });
       profile.value = res;
     } catch (e) {
-      console.log(e);
+      toast.add({
+        title: "Error",
+        description: "Error al actualizar el perfil",
+        color: "error",
+      });
+      throw e;
     } finally {
       setLoading(false);
     }

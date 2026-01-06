@@ -30,6 +30,16 @@ export const useAuth = () => {
     }
     return user;
   };
+  const updateUser = async (data: { email?: string; phone?: string }) => {
+    const { data: user, error } = await client.auth.updateUser({
+      email: data.email,
+      phone: data.phone,
+    });
+    if (error) {
+      throw error;
+    }
+    return user;
+  };
   const logout = async () => {
     const { error } = await client.auth.signOut();
     if (error) {
@@ -42,5 +52,6 @@ export const useAuth = () => {
     login,
     logout,
     signUp,
+    updateUser,
   };
 };

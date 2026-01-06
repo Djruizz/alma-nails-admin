@@ -31,8 +31,8 @@ importers:
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.2))
       supabase:
-        specifier: ^2.70.5
-        version: 2.70.5
+        specifier: ^2.67.2
+        version: 2.67.2
       tailwindcss:
         specifier: ^4.1.18
         version: 4.1.18
@@ -3754,8 +3754,8 @@ packages:
     peerDependencies:
       postcss: ^8.4.32
 
-  supabase@2.70.5:
-    resolution: {integrity: sha512-HtMGtYbcL9dxi2Yz4eGWWlxl9nQi76pOyGgCTBeE67p5AeIlv+KJhDOR8oinaNfHHMPKk0Uo1WW7Kxyrz+tdgg==}
+  supabase@2.67.2:
+    resolution: {integrity: sha512-JDOLNGfH9SPHApqRCH4XgGseSIFVZ9F/43eWfCf1dxpUm9YPND52G7QemWrJieqBtmw2MoMzGYLQHHQtxiwHXw==}
     engines: {npm: '>=8'}
     hasBin: true
 
@@ -8437,7 +8437,7 @@ snapshots:
       postcss: 8.5.6
       postcss-selector-parser: 7.1.1
 
-  supabase@2.70.5:
+  supabase@2.67.2:
     dependencies:
       bin-links: 6.0.0
       https-proxy-agent: 7.0.6

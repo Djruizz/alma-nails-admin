@@ -2,23 +2,20 @@
 import type { ProfileFormSchema } from "@/utils/schemas/ProfileFormSchema";
 import type { ZodError } from "zod";
 const { profile, updateProfile } = useProfile();
-const toast = useToast();
 
 const profileState = reactive<ProfileFormSchema>({
   full_name: "",
-  email: "",
   phone: "",
 });
 const initialProfile = ref<ProfileFormSchema | null>(null);
-const fields: (keyof ProfileFormSchema)[] = ["full_name", "email", "phone"];
+const fields: (keyof ProfileFormSchema)[] = ["full_name", "phone"];
 
 watch(
   profile,
   (p) => {
     if (!p) return;
     const profileData: ProfileFormSchema = {
-      full_name: p.full_name,
-      email: p.email,
+      full_name: p.full_name!,
       phone: p.phone,
     };
     Object.assign(profileState, profileData);
@@ -34,6 +31,7 @@ const hasChanges = computed(() => {
     (field) => profileState[field] !== initialProfile.value?.[field]
   );
 });
+
 const reset = () => {
   if (!initialProfile.value) return;
   Object.assign(profileState, structuredClone(toRaw(initialProfile.value)));
@@ -59,13 +57,15 @@ const saveProfile = async () => {
 
   await updateProfile(result.data);
   initialProfile.value = structuredClone(toRaw(profileState));
-
-  toast.add({
-    title: "Perfil actualizado",
-    description: "Los cambios se han guardado correctamente.",
-    icon: "i-heroicons-check-circle",
-  });
 };
+const createdDate = computed(() => {
+  if (!profile.value) return "";
+  return formatDate(profile.value.created_at, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+});
 </script>
 <template>
   <UCard>
@@ -77,6 +77,9 @@ const saveProfile = async () => {
         >
           Información Personal
         </h3>
+      </div>
+      <div class="text-xs text-gray-500 dark:text-gray-400">
+        Miembro desde {{ createdDate }}
       </div>
     </template>
 
@@ -103,20 +106,10 @@ const saveProfile = async () => {
             v-model="profileState.full_name"
             class="w-full"
             icon="i-heroicons-user"
+            type="text"
           />
           <template #error v-if="errors.full_name">
             <span>{{ errors.full_name }}</span>
-          </template>
-        </UFormField>
-
-        <UFormField label="Correo Electrónico" required>
-          <UInput
-            v-model="profileState.email"
-            class="w-full"
-            icon="i-heroicons-envelope"
-          />
-          <template #error v-if="errors.email">
-            <span>{{ errors.email }}</span>
           </template>
         </UFormField>
 
@@ -125,16 +118,13 @@ const saveProfile = async () => {
             v-model="profileState.phone"
             class="w-full"
             icon="i-heroicons-phone"
+            type="tel"
           />
           <template #error v-if="errors.phone">
             <span>{{ errors.phone }}</span>
           </template>
         </UFormField>
       </UForm>
-
-      <UFormField label="Biografía">
-        <UTextarea v-model="profileState.phone" :rows="3" class="w-full" />
-      </UFormField>
     </div>
 
     <template #footer>
