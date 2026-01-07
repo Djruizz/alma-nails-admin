@@ -1,21 +1,34 @@
 <script setup lang="ts">
-const items = [
+import type { TabsItem } from "@nuxt/ui";
+
+const items: TabsItem[] = [
   {
     slot: "general" as const,
     label: "General",
+    value: "general",
     icon: "i-heroicons-user-circle",
   },
   {
     slot: "business" as const,
     label: "Negocio",
+    value: "business",
     icon: "i-heroicons-building-storefront",
   },
   {
     slot: "security" as const,
     label: "Seguridad",
+    value: "security",
     icon: "i-heroicons-lock-closed",
   },
 ];
+const activeTab = ref<string>(
+  localStorage.getItem("settingsTabSelected") ?? "general"
+);
+
+// persistencia automática
+watch(activeTab, (tab) => {
+  localStorage.setItem("settingsTabSelected", tab);
+});
 </script>
 
 <template>
@@ -35,15 +48,10 @@ const items = [
     </div>
 
     <!-- Main Content Tabs -->
-    <UTabs :items="items" class="w-full">
+    <UTabs v-model="activeTab" :items="items" class="w-full gap-6">
       <!-- General Tab -->
       <template #general="{ item }">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
-          <!-- Profile Card -->
-          <div class="lg:col-span-2 space-y-6">
-            <SettingsProfileTabInfoCard />
-          </div>
-        </div>
+        <SettingsProfileTabInfoCard />
       </template>
 
       <!-- Business Tab -->
@@ -53,9 +61,7 @@ const items = [
 
       <!-- Security Tab -->
       <template #security="{ item }">
-        <div class="grid grid-cols-1 gap-6 mt-6">
-          <SettingsSecurityTabInfoCard />
-        </div>
+        <SettingsSecurityTabInfoCard />
       </template>
     </UTabs>
   </UContainer>
