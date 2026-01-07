@@ -2,7 +2,6 @@ import type { Profile } from "@/types/profile.types";
 import type { ProfileFormSchema } from "@/utils/schemas/ProfileFormSchema";
 
 export const useProfile = () => {
-  const user = useSupabaseUser();
   const profile = useState<Profile | null>("profile", () => null);
   const { setLoading } = useLoading();
   const fetchProfile = async () => {
@@ -29,13 +28,7 @@ export const useProfile = () => {
       setLoading(false);
     }
   };
-  watch(
-    () => user.value?.id,
-    (id) => {
-      if (id) fetchProfile();
-    },
-    { immediate: true }
-  );
+
   const firstName = computed(() => profile.value?.full_name?.split(" ")[0]);
   return {
     profile,

@@ -1,12 +1,15 @@
-import { serverSupabaseClient, serverSupabaseUser } from "#supabase/server";
+import { serverSupabaseClient } from "#supabase/server";
 import type { Database } from "@/types/database.types";
 import type { Profile } from "@/types/profile.types";
 
 export default defineEventHandler(async (event): Promise<Profile | null> => {
   const client = await serverSupabaseClient<Database>(event);
-  const user = await serverSupabaseUser(event);
+  const {
+    data: { user },
+    error: authError,
+  } = await client.auth.getUser();
 
-  if (!user) {
+  if (!user || authError) {
     throw createError({
       statusCode: 500,
       statusMessage: "Usuario no encontrado",
@@ -17,7 +20,7 @@ export default defineEventHandler(async (event): Promise<Profile | null> => {
   const { data: profile, error } = await client
     .from("profiles")
     .select("*")
-    .eq("id", user.sub)
+    .eq("id", user.id)
     .single();
 
   if (error) {

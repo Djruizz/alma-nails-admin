@@ -7,8 +7,10 @@ export default defineEventHandler(async (event): Promise<Profile> => {
   const client = await serverSupabaseClient<Database>(event);
   const {
     data: { user },
-  } = await client.auth.getUser(); //chage get user method
-  if (!user) {
+    error: authError,
+  } = await client.auth.getUser();
+
+  if (!user || authError) {
     throw createError({
       statusCode: 401,
       statusMessage: "Usuario no autenticado",
@@ -20,7 +22,7 @@ export default defineEventHandler(async (event): Promise<Profile> => {
     full_name: body.full_name,
     phone: body.phone,
   };
-  const { data, error } = await client
+  const { data: profile, error } = await client
     .from("profiles")
     .update(payload)
     .eq("id", user.id)
@@ -33,5 +35,5 @@ export default defineEventHandler(async (event): Promise<Profile> => {
       message: error.message,
     });
   }
-  return data;
+  return profile;
 });
