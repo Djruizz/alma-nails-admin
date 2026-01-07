@@ -51,17 +51,19 @@ const saveProfile = async () => {
   if (!result.success) return;
 
   try {
-    await updateProfile(profileState);
+    await updateProfile(result.data);
     initialProfile.value = structuredClone(toRaw(profileState));
     toast.add({
       title: "Perfil actualizado",
       description: "Se han guardado los cambios en el perfil",
+      icon: "i-lucide-circle-check",
       color: "primary",
     });
   } catch (e: any) {
     toast.add({
       title: "Error",
       description: e.statusMessage ?? "Error al actualizar el perfil",
+      icon: "i-lucide-circle-alert",
       color: "error",
     });
     return;
