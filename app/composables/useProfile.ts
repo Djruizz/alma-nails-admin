@@ -28,18 +28,11 @@ export const useProfile = () => {
   const updateProfile = async (data: ProfileFormSchema) => {
     try {
       setLoading(true);
-      const res: Profile | null = await $fetch("/api/profile", {
+      const res: Profile = await $fetch("/api/profile", {
         method: "PUT",
         body: data,
       });
       profile.value = res;
-    } catch (e) {
-      toast.add({
-        title: "Error",
-        description: "Error al actualizar el perfil",
-        color: "error",
-      });
-      throw e;
     } finally {
       setLoading(false);
     }

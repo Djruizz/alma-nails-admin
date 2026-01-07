@@ -1,7 +1,8 @@
 <script setup lang="ts">
 const { profile, updateProfile } = useProfile();
-const profileFormRef = useTemplateRef("form");
+const toast = useToast();
 
+const profileFormRef = useTemplateRef("form");
 const profileState = reactive<ProfileFormSchema>({
   full_name: "",
   phone: "",
@@ -47,12 +48,24 @@ const saveProfile = async () => {
   if (!hasChanges.value) return;
   const result = profileFormSchema.safeParse(profileState);
 
-  if (!result.success) {
+  if (!result.success) return;
+
+  try {
+    await updateProfile(profileState);
+    initialProfile.value = structuredClone(toRaw(profileState));
+    toast.add({
+      title: "Perfil actualizado",
+      description: "Se han guardado los cambios en el perfil",
+      color: "primary",
+    });
+  } catch (e: any) {
+    toast.add({
+      title: "Error",
+      description: e.statusMessage ?? "Error al actualizar el perfil",
+      color: "error",
+    });
     return;
   }
-
-  await updateProfile(result.data);
-  initialProfile.value = structuredClone(toRaw(profileState));
 };
 </script>
 <template>

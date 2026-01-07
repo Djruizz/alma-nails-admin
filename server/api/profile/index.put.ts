@@ -4,16 +4,18 @@ import type { Profile, ProfileUpdate } from "@/types/profile.types";
 export default defineEventHandler(async (event): Promise<Profile> => {
   const body = await readBody(event);
   const client = await serverSupabaseClient<Database>(event);
-  const {data: {user}} = await client.auth.getUser();
+  const {
+    data: { user },
+  } = await client.auth.getUser();
   if (!user) {
     throw createError({
       statusCode: 401,
-      statusMessage: "No autenticado",
-      message: "No autenticado",
+      statusMessage: "Usuario no autenticado",
+      message: "Usuario no autenticado",
     });
   }
   // Validar que el body tenga los campos permitidos
-  const payload: ProfileUpdate = { 
+  const payload: ProfileUpdate = {
     full_name: body.full_name,
     phone: body.phone,
   };
