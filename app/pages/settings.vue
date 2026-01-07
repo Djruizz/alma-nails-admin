@@ -54,7 +54,7 @@ const items = [
       <!-- Security Tab -->
       <template #security="{ item }">
         <div class="grid grid-cols-1 gap-6 mt-6">
-          <SettingsSecurityInfoCard />
+          <SettingsSecurityTabInfoCard />
         </div>
       </template>
     </UTabs>

@@ -44,7 +44,7 @@ export const useAuth = () => {
   const updatePassword = async (password: string) => {
     setLoading(true);
     const { data: user, error } = await client.auth.updateUser({
-      password,
+      password: password,
     });
     if (error) {
       throw error;

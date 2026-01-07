@@ -9,7 +9,7 @@ const securityFormState = reactive<SecurityFormSchema>({
 });
 
 const handleSubmit = async () => {
-  const user = useSupabaseUser();
+  const user = await useSupabaseUser();
   if (!user.value) {
     throw new Error("No se encontro un usuario");
   }
@@ -17,7 +17,7 @@ const handleSubmit = async () => {
     email: user.value.email!,
     password: securityFormState.current_password,
   });
-  if (res) {
+  if (!res) {
     return;
   }
   await updatePassword(securityFormState.new_password);
