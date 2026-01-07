@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { login, updatePassword } = useAuth();
+const { updatePassword } = useAuth();
+const toast = useToast();
 const securityFormRef = useTemplateRef("securityForm");
 
 const securityFormState = reactive<SecurityFormSchema>({
@@ -9,18 +10,29 @@ const securityFormState = reactive<SecurityFormSchema>({
 });
 
 const handleSubmit = async () => {
-  const user = await useSupabaseUser();
-  if (!user.value) {
-    throw new Error("No se encontro un usuario");
-  }
-  const res = await login({
-    email: user.value.email!,
-    password: securityFormState.current_password,
-  });
-  if (!res) {
+  if (!hasChanges.value) return;
+  const result = securityFormSchema.safeParse(securityFormState);
+  if (!result.success) return;
+
+  try {
+    await updatePassword(result.data);
+    toast.add({
+      title: "Contraseña actualizada",
+      description: "Se ha actualizado la contraseña exitosamente",
+      icon: "i-lucide-circle-check",
+      color: "primary",
+    });
+  } catch (e: any) {
+    toast.add({
+      title: "Error al actualizar la contraseña",
+      icon: "i-lucide-circle-alert",
+      description: e.statusMessage ?? "Error al actualizar la contraseña",
+      color: "error",
+    });
     return;
+  } finally {
+    reset(true);
   }
-  await updatePassword(securityFormState.new_password);
 };
 
 const hasChanges: ComputedRef<boolean> = computed(() => {
@@ -31,19 +43,22 @@ const hasChanges: ComputedRef<boolean> = computed(() => {
   );
 });
 const canceling = ref(false);
-const reset = () => {
+const reset = (inmediate = false) => {
   canceling.value = true;
-  setTimeout(() => {
-    Object.assign(securityFormState, {
-      current_password: "",
-      new_password: "",
-      confirm_new_password: "",
-    });
-    if (securityFormRef.value) {
-      securityFormRef.value.errors = [];
-    }
-    canceling.value = false;
-  }, 300);
+  setTimeout(
+    () => {
+      Object.assign(securityFormState, {
+        current_password: "",
+        new_password: "",
+        confirm_new_password: "",
+      });
+      if (securityFormRef.value) {
+        securityFormRef.value.errors = [];
+      }
+      canceling.value = false;
+    },
+    inmediate ? 0 : 300
+  );
 };
 </script>
 <template>

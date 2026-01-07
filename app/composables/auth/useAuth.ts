@@ -31,28 +31,6 @@ export const useAuth = () => {
     }
     return user;
   };
-  const updateUser = async (data: { email?: string; phone?: string }) => {
-    const { data: user, error } = await client.auth.updateUser({
-      email: data.email,
-      phone: data.phone,
-    });
-    if (error) {
-      throw error;
-    }
-    return user;
-  };
-  const updatePassword = async (password: string) => {
-    setLoading(true);
-    const { data: user, error } = await client.auth.updateUser({
-      password: password,
-    });
-    if (error) {
-      throw error;
-    }
-    setLoading(false);
-    console.log(user);
-    return user;
-  };
   const logout = async () => {
     const { error } = await client.auth.signOut();
     if (error) {
@@ -60,12 +38,22 @@ export const useAuth = () => {
     }
     navigateTo("/login");
   };
+  const updatePassword = async (data: SecurityFormSchema) => {
+    setLoading(true);
+    try {
+      await $fetch("/api/auth/change-password", {
+        method: "POST",
+        body: data,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
     login,
     logout,
     signUp,
-    updateUser,
     updatePassword,
   };
 };

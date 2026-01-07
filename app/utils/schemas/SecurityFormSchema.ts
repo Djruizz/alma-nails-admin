@@ -15,6 +15,10 @@ export const securityFormSchema = z
   .refine((data) => data.new_password === data.confirm_new_password, {
     message: "Las contraseñas no coinciden",
     path: ["confirm_new_password"],
+  })
+  .refine((data) => data.new_password !== data.current_password, {
+    message: "La contraseña nueva no puede ser igual a la actual",
+    path: ["new_password"],
   });
 
 export type SecurityFormSchema = z.infer<typeof securityFormSchema>;
