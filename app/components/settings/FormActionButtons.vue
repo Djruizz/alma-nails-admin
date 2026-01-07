@@ -21,7 +21,7 @@ const emit = defineEmits<{
       />
     </div>
     <UButton
-      label="Actualizar Contraseña"
+      :label="submitLabel"
       color="primary"
       type="submit"
       :disabled="!hasChanges"
