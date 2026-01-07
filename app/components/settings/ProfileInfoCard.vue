@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { ProfileFormSchema } from "@/utils/schemas/ProfileFormSchema";
 const { profile, updateProfile } = useProfile();
-const formRef = useTemplateRef("form");
+const profileFormRef = useTemplateRef("form");
 
 const profileState = reactive<ProfileFormSchema>({
   full_name: "",
@@ -31,13 +30,17 @@ const hasChanges = computed(() => {
     (field) => profileState[field] !== initialProfile.value?.[field]
   );
 });
-
+const canceling = ref(false);
 const reset = () => {
-  if (!initialProfile.value) return;
-  Object.assign(profileState, structuredClone(toRaw(initialProfile.value)));
-  if (formRef.value) {
-    formRef.value.errors = [];
-  }
+  canceling.value = true;
+  setTimeout(() => {
+    if (!initialProfile.value) return;
+    Object.assign(profileState, structuredClone(toRaw(initialProfile.value)));
+    if (profileFormRef.value) {
+      profileFormRef.value.errors = [];
+    }
+    canceling.value = false;
+  }, 300);
 };
 
 const saveProfile = async () => {
@@ -62,8 +65,8 @@ const createdDate = computed(() => {
 });
 const canSubmit: Ref<boolean> = computed(() => {
   if (!hasChanges.value) return false;
-  if (formRef.value) {
-    return formRef.value.errors.length === 0;
+  if (profileFormRef.value) {
+    return profileFormRef.value.errors.length === 0;
   }
   return false;
 });
@@ -92,7 +95,7 @@ const canSubmit: Ref<boolean> = computed(() => {
             color="neutral"
             label="Cambiar Foto"
             size="sm"
-            icon="i-heroicons-camera"
+            icon="i-lucide-camera"
             variant="outline"
           />
           <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
@@ -101,20 +104,19 @@ const canSubmit: Ref<boolean> = computed(() => {
         </div>
       </div>
 
-      <UForm
+      <<UForm
         ref="form"
         class="grid grid-cols-1 md:grid-cols-2 gap-6"
         :schema="profileFormSchema"
         :state="profileState"
         @submit="saveProfile"
         :validate-on-input-delay="100"
-        
       >
         <UFormField label="Nombre Completo" required name="full_name">
           <UInput
             v-model="profileState.full_name"
             class="w-full"
-            icon="i-heroicons-user"
+            icon="i-lucide-user"
             type="text"
           />
         </UFormField>
@@ -123,29 +125,20 @@ const canSubmit: Ref<boolean> = computed(() => {
           <UInput
             v-model="profileState.phone"
             class="w-full"
-            icon="i-heroicons-phone"
+            icon="i-lucide-phone"
             type="tel"
           />
-        </UFormField>
-      </UForm>
+        </UFormField> </UForm
+      >>
     </div>
 
     <template #footer>
-      <div class="flex justify-end gap-3">
-        <UButton
-          label="Cancelar"
-          v-if="hasChanges"
-          color="neutral"
-          variant="ghost"
-          @click="reset"
-        />
-        <UButton
-          label="Guardar Cambios"
-          :disabled="!canSubmit"
-          color="primary"
-          @click="formRef?.submit()"
-        />
-      </div>
+      <SettingsFormActionButtons
+        :hasChanges="hasChanges"
+        submitLabel="Guardar Cambios"
+        :canceling="canceling"
+        @reset="reset"
+      />
     </template>
   </UCard>
 </template>

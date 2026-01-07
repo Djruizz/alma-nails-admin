@@ -1,5 +1,6 @@
 export const useAuth = () => {
   const client = useSupabaseClient();
+  const { setLoading } = useLoading();
   const login = async (data: LoginSchema) => {
     const { data: user, error } = await client.auth.signInWithPassword({
       email: data.email,
@@ -19,7 +20,7 @@ export const useAuth = () => {
         data: {
           full_name: data.name,
           phone: data.phone,
-          role: 'admin',
+          role: "admin",
         },
       },
     });
@@ -40,6 +41,18 @@ export const useAuth = () => {
     }
     return user;
   };
+  const updatePassword = async (password: string) => {
+    setLoading(true);
+    const { data: user, error } = await client.auth.updateUser({
+      password,
+    });
+    if (error) {
+      throw error;
+    }
+    setLoading(false);
+    console.log(user);
+    return user;
+  };
   const logout = async () => {
     const { error } = await client.auth.signOut();
     if (error) {
@@ -53,5 +66,6 @@ export const useAuth = () => {
     logout,
     signUp,
     updateUser,
+    updatePassword,
   };
 };
