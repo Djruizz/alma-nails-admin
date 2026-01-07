@@ -7,12 +7,15 @@ export const useAuth = () => {
       password: data.password,
     });
     if (error) {
-      throw error;
+      throw createError({
+        message: error.message,
+        statusCode: error.status,
+        statusMessage: error.message,
+      });
     }
     return user;
   };
   const signUp = async (data: RegisterSchema) => {
-    console.log(data);
     const { data: user, error } = await client.auth.signUp({
       email: data.email,
       password: data.password,
@@ -25,16 +28,22 @@ export const useAuth = () => {
       },
     });
     if (error) {
-      console.error(error.message);
-      console.error(error);
-      throw error;
+      throw createError({
+        message: error.message,
+        statusCode: error.status,
+        statusMessage: error.message,
+      });
     }
     return user;
   };
   const logout = async () => {
     const { error } = await client.auth.signOut();
     if (error) {
-      throw error;
+      throw createError({
+        message: error.message,
+        statusCode: error.status,
+        statusMessage: error.message,
+      });
     }
     navigateTo("/login");
   };

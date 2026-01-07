@@ -2,7 +2,6 @@ import type { Profile } from "@/types/profile.types";
 import type { ProfileFormSchema } from "@/utils/schemas/ProfileFormSchema";
 
 export const useProfile = () => {
-  const toast = useToast();
   const user = useSupabaseUser();
   const profile = useState<Profile | null>("profile", () => null);
   const { setLoading } = useLoading();
@@ -14,13 +13,6 @@ export const useProfile = () => {
         method: "GET",
       });
       profile.value = res;
-    } catch (e) {
-      toast.add({
-        title: "Error",
-        description: "Error al obtener el perfil",
-        color: "error",
-      });
-      throw e;
     } finally {
       setLoading(false);
     }
