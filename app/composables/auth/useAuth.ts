@@ -47,7 +47,7 @@ export const useAuth = () => {
     }
     navigateTo("/login");
   };
-  const updatePassword = async (data: SecurityFormSchema) => {
+  const updatePassword = async (data: ChangePasswordSchema) => {
     setLoading(true);
     try {
       await $fetch("/api/auth/change-password", {
