@@ -1,6 +1,3 @@
-import type { Profile } from "@/types/profile.types";
-import type { ProfileFormSchema } from "@/utils/schemas/ProfileFormSchema";
-
 export const useProfile = () => {
   const profile = useState<Profile | null>("profile", () => null);
   const { setLoading } = useLoading();

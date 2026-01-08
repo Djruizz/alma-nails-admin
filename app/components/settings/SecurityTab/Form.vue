@@ -3,7 +3,7 @@ const { updatePassword } = useAuth();
 const toast = useToast();
 const securityFormRef = useTemplateRef("securityForm");
 
-const securityFormState = reactive<SecurityFormSchema>({
+const securityFormState = reactive<ChangePasswordSchema>({
   current_password: "",
   new_password: "",
   confirm_new_password: "",
@@ -11,7 +11,7 @@ const securityFormState = reactive<SecurityFormSchema>({
 
 const handleSubmit = async () => {
   if (!hasChanges.value) return;
-  const result = securityFormSchema.safeParse(securityFormState);
+  const result = changePasswordSchema.safeParse(securityFormState);
   if (!result.success) return;
 
   try {
@@ -65,7 +65,7 @@ const reset = (inmediate = false) => {
   <UForm
     ref="securityForm"
     class="grid grid-cols-1 md:grid-cols-2 gap-6"
-    :schema="securityFormSchema"
+    :schema="changePasswordSchema"
     :state="securityFormState"
     @submit="handleSubmit"
     :validate-on-input="true"

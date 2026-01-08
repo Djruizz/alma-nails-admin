@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const securityFormSchema = z
+export const changePasswordSchema = z
   .object({
     current_password: z
       .string()
@@ -21,4 +21,4 @@ export const securityFormSchema = z
     path: ["new_password"],
   });
 
-export type SecurityFormSchema = z.infer<typeof securityFormSchema>;
+export type ChangePasswordSchema = z.infer<typeof changePasswordSchema>;

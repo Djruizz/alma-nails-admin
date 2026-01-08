@@ -1,7 +1,5 @@
 import { serverSupabaseClient } from "#supabase/server";
-import type { Database } from "@/types/database.types";
-import type { Profile, ProfileUpdate } from "@/types/profile.types";
-
+import { profileFormSchema } from "@@/shared/schemas/ProfileFormSchema";
 export default defineEventHandler(async (event): Promise<Profile> => {
   const body = await readBody(event);
   const client = await serverSupabaseClient<Database>(event);
@@ -17,14 +15,17 @@ export default defineEventHandler(async (event): Promise<Profile> => {
       message: "Usuario no autenticado",
     });
   }
-  // Validar que el body tenga los campos permitidos (Idealmente con zod )
-  const payload: ProfileUpdate = {
-    full_name: body.full_name,
-    phone: body.phone,
-  };
+  const validatedData = profileFormSchema.safeParse(body);
+  if (!validatedData.success) {
+    throw createError({
+      statusCode: 400,
+      message: "Datos invalidos",
+      statusMessage: validatedData.error.message,
+    });
+  }
   const { data: profile, error } = await client
     .from("profiles")
-    .update(payload)
+    .update(validatedData.data)
     .eq("id", user.id)
     .select()
     .single();

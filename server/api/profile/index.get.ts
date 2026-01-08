@@ -1,6 +1,4 @@
 import { serverSupabaseClient } from "#supabase/server";
-import type { Database } from "@/types/database.types";
-import type { Profile } from "@/types/profile.types";
 
 export default defineEventHandler(async (event): Promise<Profile | null> => {
   const client = await serverSupabaseClient<Database>(event);

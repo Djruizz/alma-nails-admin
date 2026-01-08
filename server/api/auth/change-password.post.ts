@@ -1,9 +1,16 @@
 import { serverSupabaseClient, serverSupabaseUser } from "#supabase/server";
+import { changePasswordSchema } from "@@/shared/schemas/ChangePasswordSchema";
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  //Validar con zod
-
-  const { current_password, new_password } = body; //Should be zod validation
+  const validatedData = changePasswordSchema.safeParse(body);
+  if (!validatedData.success) {
+    throw createError({
+      statusCode: 400,
+      message: "Datos invalidos",
+      statusMessage: "Datos invalidos",
+    });
+  }
+  const { current_password, new_password } = validatedData.data;
   const user = await serverSupabaseUser(event);
   if (!user?.email) {
     throw createError({
