@@ -2,13 +2,37 @@
 const { updatePassword } = useAuth();
 const toast = useToast();
 const securityFormRef = useTemplateRef("securityForm");
-
-const securityFormState = reactive<ChangePasswordSchema>({
+const initialState = reactive<ChangePasswordSchema>({
   current_password: "",
   new_password: "",
   confirm_new_password: "",
 });
+const securityFormState = reactive<ChangePasswordSchema>({
+  ...initialState,
+});
+const fields: (keyof ChangePasswordSchema)[] = [
+  "current_password",
+  "new_password",
+  "confirm_new_password",
+];
 
+const hasChanges: ComputedRef<boolean> = computed(() => {
+  return fields.some(
+    (field) => securityFormState[field] !== initialState[field]
+  );
+});
+const canceling = ref(false);
+const reset = (inmediate = false) => {
+  canceling.value = true;
+  setTimeout(
+    () => {
+      Object.assign(securityFormState, initialState);
+      securityFormRef.value?.clear();
+      canceling.value = false;
+    },
+    inmediate ? 0 : 300
+  );
+};
 const handleSubmit = async () => {
   if (!hasChanges.value) return;
   const result = changePasswordSchema.safeParse(securityFormState);
@@ -34,32 +58,6 @@ const handleSubmit = async () => {
     reset(true);
   }
 };
-
-const hasChanges: ComputedRef<boolean> = computed(() => {
-  return (
-    securityFormState.current_password !== "" ||
-    securityFormState.new_password !== "" ||
-    securityFormState.confirm_new_password !== ""
-  );
-});
-const canceling = ref(false);
-const reset = (inmediate = false) => {
-  canceling.value = true;
-  setTimeout(
-    () => {
-      Object.assign(securityFormState, {
-        current_password: "",
-        new_password: "",
-        confirm_new_password: "",
-      });
-      if (securityFormRef.value) {
-        securityFormRef.value.errors = [];
-      }
-      canceling.value = false;
-    },
-    inmediate ? 0 : 300
-  );
-};
 </script>
 <template>
   <UForm
@@ -68,8 +66,6 @@ const reset = (inmediate = false) => {
     :schema="changePasswordSchema"
     :state="securityFormState"
     @submit="handleSubmit"
-    :validate-on-input="true"
-    :validate-on-input-delay="100"
   >
     <UFormField label="Contraseña Actual" required name="current_password">
       <UiInputPassword v-model="securityFormState.current_password" />
