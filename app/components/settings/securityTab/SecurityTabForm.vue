@@ -72,23 +72,11 @@ const reset = (inmediate = false) => {
     :validate-on-input-delay="100"
   >
     <UFormField label="Contraseña Actual" required name="current_password">
-      <UInput
-        v-model="securityFormState.current_password"
-        class="w-full"
-        icon="i-lucide-lock"
-        type="password"
-        placeholder="Ingrese su contraseña actual"
-      />
+      <UiInputPassword v-model="securityFormState.current_password" />
     </UFormField>
 
     <UFormField label="Contraseña Nueva" required name="new_password">
-      <UInput
-        v-model="securityFormState.new_password"
-        class="w-full"
-        icon="i-lucide-lock"
-        type="password"
-        placeholder="Ingrese la contraseña nueva"
-      />
+      <UiInputPassword v-model="securityFormState.new_password" />
     </UFormField>
 
     <UFormField
@@ -96,13 +84,7 @@ const reset = (inmediate = false) => {
       required
       name="confirm_new_password"
     >
-      <UInput
-        v-model="securityFormState.confirm_new_password"
-        class="w-full"
-        icon="i-lucide-lock"
-        type="password"
-        placeholder="Ingrese la contraseña nueva"
-      />
+      <UiInputPassword v-model="securityFormState.confirm_new_password" />
     </UFormField>
     <SettingsFormActionButtons
       :hasChanges="hasChanges"
