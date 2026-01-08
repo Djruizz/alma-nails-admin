@@ -31,21 +31,23 @@ export const useRegisterForm = () => {
       required: true,
     },
   ];
-  
+
   const handleSubmit = async (payload: FormSubmitEvent<RegisterSchema>) => {
     const { signUp } = useAuth();
 
     try {
-      await signUp(payload.data); 
+      await signUp(payload.data);
       toast.add({
-        title: '¡Éxito!',
-        color: 'success'
+        title: "¡Cuenta creada!",
+        icon: "i-lucide-circle-check",
+        color: "primary",
       });
       navigateTo("/");
     } catch (error: any) {
       toast.add({
-        title: "Error de autenticación",
+        title: "Error al crear cuenta",
         description: error.data?.message || "Error al crear cuenta",
+        icon: "i-lucide-circle-x",
         color: "error",
       });
     }

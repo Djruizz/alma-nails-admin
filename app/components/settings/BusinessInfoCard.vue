@@ -6,9 +6,14 @@ const business = ref({
   email: "contacto@almanails.com",
   website: "www.almanails.com",
 });
-const toast = useToast()
+const toast = useToast();
 function saveBusiness() {
-  toast.add({ title: 'Negocio actualizado', description: 'La información del negocio se ha guardado.', icon: 'i-heroicons-building-storefront' })
+  toast.add({
+    title: "Negocio actualizado",
+    description: "La información del negocio se ha guardado.",
+    icon: "i-heroicons-building-storefront",
+    color: "primary",
+  });
 }
 </script>
 <template>
