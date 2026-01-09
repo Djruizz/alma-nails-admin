@@ -18,7 +18,6 @@ export const useProfileForm = (formRef: any) => {
       };
       Object.assign(profileState, profileData);
       initialProfile.value = structuredClone(toRaw(profileData));
-      formRef?.value.validate();
     },
     { immediate: true }
   );
