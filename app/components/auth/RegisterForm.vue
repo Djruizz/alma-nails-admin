@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { formFields, handleSubmit } = useRegisterForm();
+const { formFields, handleSubmit, loadingButton } = useRegisterForm();
 </script>
 <template>
   <UAuthForm
@@ -12,6 +12,7 @@ const { formFields, handleSubmit } = useRegisterForm();
       label: 'Ingresar',
     }"
     @submit="handleSubmit"
+    :loading="loadingButton"
   >
   </UAuthForm>
 </template>

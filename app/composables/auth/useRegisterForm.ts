@@ -1,9 +1,10 @@
 import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
 export const useRegisterForm = () => {
   const toast = useToast();
+  const loadingButton = ref(false);
   const formFields: AuthFormField[] = [
     {
-      name: "name",
+      name: "full_name",
       type: "text",
       label: "Nombre",
       placeholder: "Ingresa tu nombre",
@@ -34,7 +35,7 @@ export const useRegisterForm = () => {
 
   const handleSubmit = async (payload: FormSubmitEvent<RegisterSchema>) => {
     const { signUp } = useAuth();
-
+    loadingButton.value = true;
     try {
       await signUp(payload.data);
       toast.add({
@@ -51,10 +52,13 @@ export const useRegisterForm = () => {
         icon: "i-lucide-circle-x",
         color: "error",
       });
+    } finally {
+      loadingButton.value = false;
     }
   };
   return {
     formFields,
+    loadingButton,
     handleSubmit,
   };
 };

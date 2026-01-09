@@ -16,25 +16,10 @@ export const useAuth = () => {
     return user;
   };
   const signUp = async (data: RegisterSchema) => {
-    const { data: user, error } = await client.auth.signUp({
-      email: data.email,
-      password: data.password,
-      options: {
-        data: {
-          full_name: data.name,
-          phone: data.phone,
-          role: "admin",
-        },
-      },
+    await $fetch("/api/auth/register", {
+      method: "POST",
+      body: data,
     });
-    if (error) {
-      throw createError({
-        message: translateSupabaseError(error.message),
-        statusCode: error.status,
-        statusMessage: "Error de registro",
-      });
-    }
-    return user;
   };
   const logout = async () => {
     const { error } = await client.auth.signOut();
