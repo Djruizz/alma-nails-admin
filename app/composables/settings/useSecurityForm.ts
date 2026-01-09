@@ -47,9 +47,10 @@ export const useSecurityForm = (formRef: any) => {
       });
     } catch (e: any) {
       toast.add({
-        title: "Error al actualizar la contraseña",
+        title: e.statusMessage || "Error al actualizar la contraseña",
         icon: "i-lucide-circle-alert",
-        description: e.statusMessage ?? "Error al actualizar la contraseña",
+        description:
+          e.data?.message || e.message || "Error al actualizar la contraseña",
         color: "error",
       });
       return;

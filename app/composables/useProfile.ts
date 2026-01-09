@@ -1,6 +1,7 @@
 export const useProfile = () => {
   const profile = useState<Profile | null>("profile", () => null);
   const { setLoading } = useLoading();
+  const toast = useToast();
   const fetchProfile = async () => {
     if (profile.value) return;
     try {

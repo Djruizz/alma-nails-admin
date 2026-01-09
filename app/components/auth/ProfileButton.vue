@@ -47,8 +47,19 @@ const userItems = ref<DropdownMenuItem[]>([
       label: "Cerrar Sesión",
       icon: "i-lucide-log-out",
       color: "error",
-      onSelect() {
-        logout();
+      onSelect: async () => {
+        try {
+          await logout();
+        } catch (error: any) {
+          const toast = useToast();
+          toast.add({
+            title: error.statusMessage || "Error",
+            description:
+              error.data?.message || error.message || "Error al cerrar sesión",
+            icon: "i-lucide-circle-alert",
+            color: "error",
+          });
+        }
       },
     },
   ],

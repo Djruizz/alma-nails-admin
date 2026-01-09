@@ -9,9 +9,11 @@ export default defineEventHandler(async (event): Promise<Profile | null> => {
 
   if (!user || authError) {
     throw createError({
-      statusCode: 500,
-      statusMessage: "Usuario no encontrado",
-      message: "Usuario no encontrado",
+      statusCode: 401,
+      statusMessage: "Usuario no autenticado",
+      message: authError
+        ? translateSupabaseError(authError.message)
+        : "No se ha encontrado una sesión activa",
     });
   }
 
@@ -25,7 +27,7 @@ export default defineEventHandler(async (event): Promise<Profile | null> => {
     throw createError({
       statusCode: 500,
       statusMessage: "Error al obtener el perfil",
-      message: error.message,
+      message: translateSupabaseError(error.message),
     });
   }
   if (!profile) return null;

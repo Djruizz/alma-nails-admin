@@ -56,8 +56,9 @@ export const useProfileForm = (formRef: any) => {
       });
     } catch (e: any) {
       toast.add({
-        title: "Error",
-        description: e.statusMessage ?? "Error al actualizar el perfil",
+        title: e.statusMessage || "Error",
+        description:
+          e.data?.message || e.message || "Error al actualizar el perfil",
         icon: "i-lucide-circle-alert",
         color: "error",
       });

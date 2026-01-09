@@ -45,8 +45,9 @@ export const useRegisterForm = () => {
       navigateTo("/");
     } catch (error: any) {
       toast.add({
-        title: "Error al crear cuenta",
-        description: error.data?.message || "Error al crear cuenta",
+        title: error.statusMessage || "Error al crear cuenta",
+        description:
+          error.data?.message || error.message || "Error al crear cuenta",
         icon: "i-lucide-circle-x",
         color: "error",
       });

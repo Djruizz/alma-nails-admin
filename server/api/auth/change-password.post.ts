@@ -1,12 +1,13 @@
 import { serverSupabaseClient, serverSupabaseUser } from "#supabase/server";
 import { changePasswordSchema } from "@@/shared/schemas/ChangePasswordSchema";
+import { translateSupabaseError } from "@@/shared/utils/errorTranslator";
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const validatedData = changePasswordSchema.safeParse(body);
   if (!validatedData.success) {
     throw createError({
       statusCode: 400,
-      message: "Datos invalidos",
+      message: validatedData.error.message,
       statusMessage: "Datos invalidos",
     });
   }
@@ -15,7 +16,7 @@ export default defineEventHandler(async (event) => {
   if (!user?.email) {
     throw createError({
       statusCode: 401,
-      message: "Usuario no encontrado",
+      message: "No se ha encontrado el usuario en la sesión.",
       statusMessage: "Usuario no encontrado",
     });
   }
@@ -30,8 +31,8 @@ export default defineEventHandler(async (event) => {
   if (authError) {
     throw createError({
       statusCode: 401,
-      message: "Contraseña actual incorrecta",
-      statusMessage: "Contraseña actual incorrecta",
+      message: translateSupabaseError(authError.message),
+      statusMessage: "Credenciales incorrectas",
     });
   }
 
@@ -41,9 +42,9 @@ export default defineEventHandler(async (event) => {
 
   if (updateError) {
     throw createError({
-      statusCode: 401,
-      message: "Error al actualizar la contraseña",
-      statusMessage: "Error al actualizar la contraseña",
+      statusCode: 500,
+      message: translateSupabaseError(updateError.message),
+      statusMessage: "Error al actualizar contraseña",
     });
   }
   return { ok: true };

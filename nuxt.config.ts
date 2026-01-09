@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     dirs: [
       "@@/shared/schemas",
       "@@/shared/types",
+      "@@/shared/utils",
       "composables/auth",
       "composables/settings",
     ],

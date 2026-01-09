@@ -19,8 +19,8 @@ export default defineEventHandler(async (event): Promise<Profile> => {
   if (!validatedData.success) {
     throw createError({
       statusCode: 400,
-      message: "Datos invalidos",
-      statusMessage: validatedData.error.message,
+      message: validatedData.error.message,
+      statusMessage: "Datos invalidos",
     });
   }
   const { data: profile, error } = await client
@@ -33,7 +33,7 @@ export default defineEventHandler(async (event): Promise<Profile> => {
     throw createError({
       statusCode: 500,
       statusMessage: "Error al actualizar el perfil",
-      message: error.message,
+      message: translateSupabaseError(error.message),
     });
   }
   return profile;

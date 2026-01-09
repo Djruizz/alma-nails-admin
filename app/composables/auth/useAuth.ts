@@ -8,9 +8,9 @@ export const useAuth = () => {
     });
     if (error) {
       throw createError({
-        message: error.message,
+        message: translateSupabaseError(error.message),
         statusCode: error.status,
-        statusMessage: error.message,
+        statusMessage: "Error de inicio de sesión",
       });
     }
     return user;
@@ -29,9 +29,9 @@ export const useAuth = () => {
     });
     if (error) {
       throw createError({
-        message: error.message,
+        message: translateSupabaseError(error.message),
         statusCode: error.status,
-        statusMessage: error.message,
+        statusMessage: "Error de registro",
       });
     }
     return user;
@@ -42,7 +42,7 @@ export const useAuth = () => {
       throw createError({
         message: error.message,
         statusCode: error.status,
-        statusMessage: error.message,
+        statusMessage: "Error de cierre de sesión",
       });
     }
     navigateTo("/login");

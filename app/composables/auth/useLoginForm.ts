@@ -22,17 +22,18 @@ export const useLoginForm = () => {
 
     try {
       await login(payload.data);
+      navigateTo("/");
       toast.add({
         title: "¡Bienvenido!",
         icon: "i-lucide-circle-check",
         color: "primary",
       });
-      navigateTo("/");
     } catch (error: any) {
       toast.add({
-        title: "Error de autenticación",
+        title: error.statusMessage || "Error de autenticación",
         icon: "i-lucide-circle-x",
-        description: error.data?.message || "Credenciales incorrectas",
+        description:
+          error.data?.message || error.message || "Credenciales incorrectas",
         color: "error",
       });
     }
