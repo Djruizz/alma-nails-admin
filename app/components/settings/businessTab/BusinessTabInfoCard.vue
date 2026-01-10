@@ -1,6 +1,11 @@
 <script setup lang="ts"></script>
 <template>
-  <UCard class="mt-6">
+  <UCard
+    class="mt-6"
+    :ui="{
+      body: 'space-y-5',
+    }"
+  >
     <template #header>
       <div class="flex items-center gap-2">
         <UIcon
@@ -16,5 +21,7 @@
       </div>
     </template>
     <SettingsBusinessTabForm />
+    <USeparator label="Redes Sociales" />
+    <SettingsBusinessTabSocials />
   </UCard>
 </template>
