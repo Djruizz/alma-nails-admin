@@ -62,6 +62,60 @@ export type Database = {
           },
         ]
       }
+      business_profiles: {
+        Row: {
+          address: string | null
+          app_settings: Json | null
+          cover_image_url: string | null
+          created_at: string | null
+          description: string | null
+          email: string | null
+          google_maps_url: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          phone: string | null
+          schedule_config: Json | null
+          slug: string
+          social_links: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          app_settings?: Json | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          google_maps_url?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          phone?: string | null
+          schedule_config?: Json | null
+          slug: string
+          social_links?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          app_settings?: Json | null
+          cover_image_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          email?: string | null
+          google_maps_url?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          phone?: string | null
+          schedule_config?: Json | null
+          slug?: string
+          social_links?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       clients: {
         Row: {
           created_at: string | null
@@ -88,7 +142,7 @@ export type Database = {
       }
       profiles: {
         Row: {
-          born_date: string
+          born_date: string | null
           created_at: string
           full_name: string
           id: string
@@ -96,7 +150,7 @@ export type Database = {
           role: Database["public"]["Enums"]["role"]
         }
         Insert: {
-          born_date: string
+          born_date?: string | null
           created_at?: string
           full_name: string
           id?: string
@@ -104,7 +158,7 @@ export type Database = {
           role?: Database["public"]["Enums"]["role"]
         }
         Update: {
-          born_date?: string
+          born_date?: string | null
           created_at?: string
           full_name?: string
           id?: string

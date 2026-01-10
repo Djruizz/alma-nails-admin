@@ -1,16 +1,24 @@
 <script setup lang="ts">
-const businessState: any = reactive({
-  name: "",
-  phone: "",
-  description: "",
-  address: "",
-  email: "",
-});
+const form = useTemplateRef("form");
+const { businessState, reset, saveBusiness, hasChanges, canceling } =
+  useBusinessInfoForm(form);
 </script>
 
 <template>
-  <UForm class="grid grid-cols-2 gap-6">
-    <UFormField label="Nombre del Negocio" :required="true" class="col-span-1">
+  <UForm
+    ref="form"
+    class="grid grid-cols-2 gap-6"
+    :schema="businessInfoFormSchema"
+    :state="businessState"
+    @submit="saveBusiness"
+    :validate-on-input-delay="100"
+  >
+    <UFormField
+      label="Nombre del Negocio"
+      :required="true"
+      name="name"
+      class="col-span-1"
+    >
       <UInput
         v-model="businessState.name"
         class="w-full"
@@ -21,6 +29,7 @@ const businessState: any = reactive({
     <UFormField
       label="Teléfono de Contacto"
       :required="true"
+      name="phone"
       class="col-span-1"
     >
       <UInput
@@ -33,6 +42,7 @@ const businessState: any = reactive({
     <UFormField
       label="Descripción del Negocio"
       :required="true"
+      name="description"
       class="col-span-2"
     >
       <UTextarea
@@ -43,7 +53,12 @@ const businessState: any = reactive({
       />
     </UFormField>
 
-    <UFormField label="Email Público" :required="true" class="col-span-2">
+    <UFormField
+      label="Email Público"
+      :required="true"
+      name="email"
+      class="col-span-2"
+    >
       <UInput
         v-model="businessState.email"
         class="w-full"
@@ -52,7 +67,12 @@ const businessState: any = reactive({
       />
     </UFormField>
 
-    <UFormField label="Dirección" :required="true" class="col-span-2">
+    <UFormField
+      label="Dirección"
+      :required="true"
+      name="address"
+      class="col-span-2"
+    >
       <UInput
         v-model="businessState.address"
         class="w-full"
@@ -61,9 +81,10 @@ const businessState: any = reactive({
     </UFormField>
 
     <SettingsFormActionButtons
-      :has-changes="false"
-      :canceling="false"
-      submit-label="Guardar"
+      :has-changes="hasChanges"
+      :canceling="canceling"
+      @reset="reset"
+      submit-label="Actualizar Información"
       class="col-span-2"
     />
   </UForm>

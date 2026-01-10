@@ -1,14 +1,17 @@
 <script setup lang="ts">
 const { isLoading } = useLoading();
 const { fetchProfile } = useProfile();
+const { fetchBusiness } = useBusiness();
 const toast = useToast();
 onMounted(() => {
   try {
     fetchProfile();
+    fetchBusiness();
   } catch (e: any) {
     toast.add({
       title: e.statusMessage || "Error",
-      description: e.data?.message || e.message || "Error al obtener el perfil",
+      description:
+        e.data?.message || e.message || "Error al cargar la informacion",
       icon: "i-lucide-circle-alert",
       color: "error",
     });
