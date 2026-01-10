@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { bornDateSchema } from "./DateSchema";
 
 export const profileFormSchema = z
   .object({
@@ -21,6 +22,7 @@ export const profileFormSchema = z
       )
       .optional()
       .nullable(),
+    born_date: bornDateSchema,
   })
   .strict();
 

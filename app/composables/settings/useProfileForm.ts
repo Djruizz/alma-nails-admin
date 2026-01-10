@@ -4,9 +4,14 @@ export const useProfileForm = (formRef: any) => {
   const initialProfile = shallowRef<ProfileFormSchema>({
     full_name: "",
     phone: "",
+    born_date: "",
   });
   const profileState = reactive<ProfileFormSchema>(initialProfile.value);
-  const fields: (keyof ProfileFormSchema)[] = ["full_name", "phone"];
+  const fields: (keyof ProfileFormSchema)[] = [
+    "full_name",
+    "phone",
+    "born_date",
+  ];
 
   watch(
     profile,
@@ -15,6 +20,7 @@ export const useProfileForm = (formRef: any) => {
       const profileData: ProfileFormSchema = {
         full_name: p.full_name || "",
         phone: p.phone || "",
+        born_date: p.born_date || "",
       };
       Object.assign(profileState, profileData);
       initialProfile.value = structuredClone(toRaw(profileData));
