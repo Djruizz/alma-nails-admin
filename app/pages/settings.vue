@@ -56,7 +56,7 @@ watch(activeTab, (tab) => {
 
       <!-- Business Tab -->
       <template #business="{ item }">
-        <SettingsBusinessInfoCard />
+        <SettingsBusinessTabInfoCard />
       </template>
 
       <!-- Security Tab -->
