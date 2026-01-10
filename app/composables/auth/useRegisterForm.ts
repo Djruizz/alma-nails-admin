@@ -18,6 +18,13 @@ export const useRegisterForm = () => {
       required: true,
     },
     {
+      name: "born_date",
+      type: "date",
+      label: "Fecha de nacimiento",
+      placeholder: "Ingresa tu fecha de nacimiento",
+      required: true,
+    },
+    {
       name: "email",
       type: "email",
       label: "Email",
@@ -37,6 +44,7 @@ export const useRegisterForm = () => {
     const { signUp } = useAuth();
     loadingButton.value = true;
     try {
+      console.log(payload.data);
       await signUp(payload.data);
       toast.add({
         title: "¡Cuenta creada!",
