@@ -119,54 +119,6 @@ export type Database = {
         }
         Relationships: []
       }
-      business_socials: {
-        Row: {
-          business_id: string
-          created_at: string | null
-          custom_icon: string | null
-          custom_name: string | null
-          id: string
-          position: number | null
-          social_network_id: string | null
-          url: string
-        }
-        Insert: {
-          business_id: string
-          created_at?: string | null
-          custom_icon?: string | null
-          custom_name?: string | null
-          id?: string
-          position?: number | null
-          social_network_id?: string | null
-          url: string
-        }
-        Update: {
-          business_id?: string
-          created_at?: string | null
-          custom_icon?: string | null
-          custom_name?: string | null
-          id?: string
-          position?: number | null
-          social_network_id?: string | null
-          url?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "business_socials_business_id_fkey"
-            columns: ["business_id"]
-            isOneToOne: false
-            referencedRelation: "business_profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "business_socials_social_network_id_fkey"
-            columns: ["social_network_id"]
-            isOneToOne: false
-            referencedRelation: "social_networks"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       clients: {
         Row: {
           created_at: string | null
@@ -239,39 +191,6 @@ export type Database = {
           is_active?: boolean | null
           name?: string
           price?: number
-        }
-        Relationships: []
-      }
-      social_networks: {
-        Row: {
-          base_url: string | null
-          brand_color: string | null
-          created_at: string | null
-          icon: string
-          id: string
-          is_active: boolean | null
-          key: string
-          name: string
-        }
-        Insert: {
-          base_url?: string | null
-          brand_color?: string | null
-          created_at?: string | null
-          icon: string
-          id?: string
-          is_active?: boolean | null
-          key: string
-          name: string
-        }
-        Update: {
-          base_url?: string | null
-          brand_color?: string | null
-          created_at?: string | null
-          icon?: string
-          id?: string
-          is_active?: boolean | null
-          key?: string
-          name?: string
         }
         Relationships: []
       }
