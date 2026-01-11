@@ -16,6 +16,9 @@ export type SocialNetworkLite = Pick<
   "id" | "name" | "icon" | "base_url"
 >;
 
+export type BusinessSocialBase =
+  Database["public"]["Tables"]["business_socials"]["Insert"];
+
 export type BusinessSocial =
   Database["public"]["Tables"]["business_socials"]["Row"] & {
     social_networks: Pick<

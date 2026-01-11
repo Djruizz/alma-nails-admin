@@ -1,6 +1,6 @@
 import { serverSupabaseClient } from "#supabase/server";
 
-export default defineEventHandler(async (event): Promise<Profile | null> => {
+export default defineEventHandler(async (event): Promise<Profile> => {
   const client = await serverSupabaseClient<Database>(event);
   const {
     data: { user },
@@ -30,7 +30,6 @@ export default defineEventHandler(async (event): Promise<Profile | null> => {
       message: translateSupabaseError(error.message),
     });
   }
-  if (!profile) return null;
 
   return profile;
 });

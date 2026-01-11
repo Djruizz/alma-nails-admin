@@ -15,6 +15,4 @@ export const phoneSchema = z
   .regex(
     /^\d{10}$/,
     "El teléfono debe contener exactamente 10 dígitos numéricos"
-  )
-  .optional()
-  .nullable();
+  );
