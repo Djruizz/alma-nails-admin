@@ -25,10 +25,23 @@ export const useBusiness = () => {
       setLoading(false);
     }
   };
+  const updateSocialLinks = async (data: SocialLink[]) => {
+    try {
+      setLoading(true);
+      const res: Business = await $fetch("/api/business/social-links", {
+        method: "PUT",
+        body: data,
+      });
+      business.value = res;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
     business,
     fetchBusiness,
     updateBusiness,
+    updateSocialLinks,
   };
 };

@@ -11,7 +11,9 @@ export type BusinessUpdate =
 export type SocialLink = {
   id: string;
   name: string;
+  key: string;
   url: string;
   icon: string;
   brand_color: string;
+  position: number;
 };

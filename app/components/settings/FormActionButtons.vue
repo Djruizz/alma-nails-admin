@@ -6,6 +6,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{
   reset: [];
+  action: [];
 }>();
 </script>
 <template>
@@ -25,6 +26,7 @@ const emit = defineEmits<{
       color="primary"
       type="submit"
       :disabled="!hasChanges"
+      @click="$emit('action')"
     />
   </div>
 </template>
