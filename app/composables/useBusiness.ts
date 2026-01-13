@@ -25,7 +25,7 @@ export const useBusiness = () => {
       setLoading(false);
     }
   };
-  const updateSocialLinks = async (data: SocialLink[]) => {
+  const updateSocialLinks = async (data: BusinessSocialSchema[]) => {
     try {
       setLoading(true);
       const res: Business = await $fetch("/api/business/social-links", {

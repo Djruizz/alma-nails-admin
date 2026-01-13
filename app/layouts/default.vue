@@ -27,14 +27,14 @@ onMounted(() => {
   <UMain class="mb-16">
     <div
       v-if="isLoading"
-      class="fixed inset-0 flex items-center justify-center"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm"
     >
       <UIcon
         name="i-heroicons-arrow-path"
         class="w-8 h-8 animate-spin text-primary"
       />
     </div>
-    <div v-show="!isLoading">
+    <div>
       <slot></slot>
     </div>
   </UMain>

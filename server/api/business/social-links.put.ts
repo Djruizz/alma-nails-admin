@@ -1,4 +1,6 @@
 import { serverSupabaseClient } from "#supabase/server";
+import { businessSocialSchema } from "@@/shared/schemas/BusinessSocialSchema";
+import { z } from "zod";
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const client = await serverSupabaseClient<Database>(event);
@@ -13,12 +15,10 @@ export default defineEventHandler(async (event) => {
       message: "Usuario no autenticado",
     });
   }
-  const payload = {
-    social_links: body,
-  };
+  const validatedLink = z.array(businessSocialSchema).parse(body);
   const { data: business, error } = await client
     .from("business_profiles")
-    .update({ social_links: payload.social_links })
+    .update({ social_links: validatedLink })
     .eq("owner_id", user.id)
     .select()
     .single();
