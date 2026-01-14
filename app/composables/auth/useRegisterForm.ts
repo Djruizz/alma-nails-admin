@@ -44,7 +44,6 @@ export const useRegisterForm = () => {
     const { signUp } = useAuth();
     loadingButton.value = true;
     try {
-      console.log(payload.data);
       await signUp(payload.data);
       toast.add({
         title: "¡Cuenta creada!",

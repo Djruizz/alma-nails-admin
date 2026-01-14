@@ -1,8 +1,10 @@
 import { z } from "zod";
+import { emailSchema } from "./Standard/Schemas";
+import { passwordSchema } from "./Standard/Schemas";
 
 export const loginSchema = z.object({
-  email: z.email("Email inválido"),
-  password: z.string("Contraseña inválida").min(8, "8 caracteres como mínimo"),
+  email: emailSchema,
+  password: passwordSchema,
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;

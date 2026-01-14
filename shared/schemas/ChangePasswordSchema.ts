@@ -1,16 +1,11 @@
 import z from "zod";
+import { passwordSchema } from "./Standard/Schemas";
 
 export const changePasswordSchema = z
   .object({
-    current_password: z
-      .string()
-      .min(8, "La contraseña debe tener al menos 8 caracteres"),
-    new_password: z
-      .string()
-      .min(8, "La contraseña debe tener al menos 8 caracteres"),
-    confirm_new_password: z
-      .string()
-      .min(8, "La contraseña debe tener al menos 8 caracteres"),
+    current_password: passwordSchema,
+    new_password: passwordSchema,
+    confirm_new_password: passwordSchema,
   })
   .refine((data) => data.new_password === data.confirm_new_password, {
     message: "Las contraseñas no coinciden",

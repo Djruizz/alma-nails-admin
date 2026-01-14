@@ -1,11 +1,18 @@
 import { z } from "zod";
-import { bornDateSchema } from "./DateSchema";
+import { bornDateSchema } from "./Standard/DateSchema";
+import {
+  nameSchema,
+  phoneSchema,
+  emailSchema,
+  passwordSchema,
+} from "./Standard/Schemas";
+
 export const registerSchema = z.object({
-  full_name: z.string("Nombre inválido").min(3, "3 caracteres como mínimo"),
-  phone: z.string("Telefono inválido").min(8, "8 caracteres como mínimo"),
+  full_name: nameSchema,
+  phone: phoneSchema,
   born_date: bornDateSchema,
-  email: z.email("Email inválido"),
-  password: z.string("Contraseña inválida").min(8, "8 caracteres como mínimo"),
+  email: emailSchema,
+  password: passwordSchema,
 });
 
 export type RegisterSchema = z.infer<typeof registerSchema>;

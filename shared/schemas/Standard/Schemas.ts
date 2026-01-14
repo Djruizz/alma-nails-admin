@@ -16,3 +16,12 @@ export const phoneSchema = z
     /^\d{10}$/,
     "El teléfono debe contener exactamente 10 dígitos numéricos"
   );
+
+export const passwordSchema = z
+  .string()
+  .min(8, "La contraseña debe tener al menos 8 caracteres")
+  .max(50, "La contraseña es demasiado larga")
+  .regex(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/,
+    "La contraseña debe contener al menos una mayúscula, una minúscula, un número y un carácter especial"
+  );

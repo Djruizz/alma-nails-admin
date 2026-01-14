@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { nameSchema, phoneSchema, emailSchema } from "./InputSchemas";
+import { nameSchema, phoneSchema, emailSchema } from "./Standard/Schemas";
 
 export const businessInfoFormSchema = z
   .object({
