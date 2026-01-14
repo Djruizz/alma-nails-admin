@@ -17,9 +17,11 @@ export default defineNuxtConfig({
   supabase: {
     url: process.env.SUPABASE_URL,
     key: process.env.SUPABASE_KEY,
+    redirect: false, // Desactivar redirect automático para manejarlo manualmente
     redirectOptions: {
       login: "/login",
-      callback: "/dashboard",
+      callback: "/",
+      exclude: ["/", "/login"], // Rutas que no requieren autenticación
     },
     types: "@@/shared/types/database.types.ts",
   },

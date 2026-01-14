@@ -3,24 +3,44 @@ const route = useRoute();
 const { mobileMenu } = useNavigation();
 
 const isActive = (path: string) => {
-  if (path === "/") {
-    return route.path === "/";
+  // Normalizar las rutas para comparación
+  const currentPath = route.path;
+
+  // Si el path del item es exactamente igual a la ruta actual
+  if (currentPath === path) {
+    return true;
   }
-  return route.path.startsWith(path);
+
+  // Si el item apunta a la raíz del negocio y estamos en esa ruta exacta
+  if (path.endsWith(`/business/${route.params.slug}`) && currentPath === path) {
+    return true;
+  }
+
+  // Para otras rutas, verificar si la ruta actual comienza con el path del item
+  // Pero solo si no es la ruta raíz del negocio
+  if (
+    !path.endsWith(`/business/${route.params.slug}`) &&
+    currentPath.startsWith(path)
+  ) {
+    return true;
+  }
+
+  return false;
 };
+
 const activeIndex = computed(() => {
-  return mobileMenu.findIndex((i) => isActive(i.to));
+  return mobileMenu.value.findIndex((i) => isActive(i.to));
 });
 
 const left = computed(
   () =>
     `calc(
-    (${activeIndex.value} * (100% / ${mobileMenu.length}))
-    + ((100% / ${mobileMenu.length} - (100% / ${mobileMenu.length} * 0.1)) / 2)
+    (${activeIndex.value} * (100% / ${mobileMenu.value.length}))
+    + ((100% / ${mobileMenu.value.length} - (100% / ${mobileMenu.value.length} * 0.1)) / 2)
   )`
 );
 
-const width = computed(() => `calc(100% / ${mobileMenu.length} *0.1)`);
+const width = computed(() => `calc(100% / ${mobileMenu.value.length} *0.1)`);
 </script>
 <template>
   <nav

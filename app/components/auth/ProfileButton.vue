@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { type DropdownMenuItem } from "@nuxt/ui";
-const colorMode = useColorMode();
-
+const { settingsButton } = useNavigation();
 const { logout } = useAuth();
 const { firstName, profile } = useProfile();
 const user = useSupabaseUser();
@@ -30,7 +29,7 @@ const userItems = ref<DropdownMenuItem[]>([
     {
       label: "Mi Perfil",
       icon: "i-lucide-user-round-cog",
-      to: "/settings",
+      to: settingsButton.value.to,
     },
   ],
   [
