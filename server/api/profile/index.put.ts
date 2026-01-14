@@ -1,20 +1,11 @@
 import { serverSupabaseClient } from "#supabase/server";
 import { profileFormSchema } from "@@/shared/schemas/ProfileFormSchema";
+import { authenticatedUser } from "@@/server/utils/protectRoute";
 export default defineEventHandler(async (event): Promise<Profile> => {
-  const body = await readBody(event);
+  const user = await authenticatedUser(event);
   const client = await serverSupabaseClient<Database>(event);
-  const {
-    data: { user },
-    error: authError,
-  } = await client.auth.getUser();
 
-  if (!user || authError) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Usuario no autenticado",
-      message: "Usuario no autenticado",
-    });
-  }
+  const body = await readBody(event);
   const validatedData = profileFormSchema.safeParse(body);
   if (!validatedData.success) {
     throw createError({
@@ -26,7 +17,7 @@ export default defineEventHandler(async (event): Promise<Profile> => {
   const { data: profile, error } = await client
     .from("profiles")
     .update(validatedData.data)
-    .eq("id", user.id)
+    .eq("id", user.sub)
     .select()
     .single();
   if (error) {

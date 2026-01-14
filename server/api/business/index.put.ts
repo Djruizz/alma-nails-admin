@@ -1,20 +1,11 @@
 import { serverSupabaseClient } from "#supabase/server";
 import { businessInfoFormSchema } from "@@/shared/schemas/BusinessInfoFormSchema";
+import { authenticatedUser } from "@@/server/utils/protectRoute";
 export default defineEventHandler(async (event): Promise<Business> => {
-  const body = await readBody(event);
+  const user = await authenticatedUser(event);
   const client = await serverSupabaseClient<Database>(event);
-  const {
-    data: { user },
-    error: authError,
-  } = await client.auth.getUser();
 
-  if (!user || authError) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Usuario no autenticado",
-      message: "Usuario no autenticado",
-    });
-  }
+  const body = await readBody(event);
   const validatedData = businessInfoFormSchema.safeParse(body);
   if (!validatedData.success) {
     throw createError({
@@ -26,7 +17,7 @@ export default defineEventHandler(async (event): Promise<Business> => {
   const { data: business, error } = await client
     .from("business_profiles")
     .update(validatedData.data)
-    .eq("owner_id", user.id)
+    .eq("owner_id", user.sub)
     .select()
     .single();
   if (error) {
