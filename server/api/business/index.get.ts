@@ -1,18 +1,15 @@
 import { serverSupabaseClient } from "#supabase/server";
 import { authenticatedUser } from "@@/server/utils/protectRoute";
 
-export default defineEventHandler(async (event): Promise<Business> => {
+export default defineEventHandler(async (event) => {
   const user = await authenticatedUser(event);
   const client = await serverSupabaseClient<Database>(event);
 
-  console.log("cookies:", getRequestHeader(event, "cookie"));
-  console.log("auth:", getRequestHeader(event, "authorization"));
-
-  const { data: business, error } = await client
-    .from("business_profiles")
-    .select("*")
-    .eq("owner_id", user.sub)
-    .single();
+  const { data: member, error } = await client
+    .from("business_members")
+    .select("role, business_profiles(*)")
+    .eq("user_id", user.sub)
+    .maybeSingle();
 
   if (error) {
     throw createError({
@@ -21,5 +18,12 @@ export default defineEventHandler(async (event): Promise<Business> => {
       message: error.message,
     });
   }
-  return business;
+  if (!member) {
+    return { hasBusiness: false, business: null, role: null };
+  }
+  return {
+    role: member.role,
+    business: member.business_profiles,
+    hasBusiness: true,
+  };
 });

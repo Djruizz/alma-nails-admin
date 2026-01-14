@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { serverSupabaseClient } from "#supabase/server";
 import { businessSocialSchema } from "@@/shared/schemas/BusinessSocialSchema";
-import { authenticatedUser } from "@@/server/utils/protectRoute";
+import { authenticatedUser, getBusinessId } from "@@/server/utils/protectRoute";
 
 export default defineEventHandler(async (event) => {
   const user = await authenticatedUser(event);
@@ -9,10 +9,21 @@ export default defineEventHandler(async (event) => {
 
   const body = await readBody(event);
   const validatedLink = z.array(businessSocialSchema).parse(body);
+  const businessId = await getBusinessId(event);
+  if (!businessId) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Perfil no encontrado",
+      message: "Perfil no encontrado",
+    });
+  }
   const { data: business, error } = await client
     .from("business_profiles")
-    .update({ social_links: validatedLink })
-    .eq("owner_id", user.sub)
+    .update({
+      social_links: validatedLink,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", businessId)
     .select()
     .single();
   if (error) {

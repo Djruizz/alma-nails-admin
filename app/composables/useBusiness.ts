@@ -1,26 +1,37 @@
 export const useBusiness = () => {
-  const business = useState<Business | null>("business", () => null);
+  const business = useState<BusinessState>("business_context", () => ({
+    data: null,
+    role: null,
+    hasBusiness: false,
+  }));
   const { setLoading } = useLoading();
 
   const fetchBusiness = async () => {
     try {
       setLoading(true);
-      const res: Business = await $fetch("/api/business", {
+      const res = await $fetch<BusinessApiResponse>("/api/business", {
         method: "GET",
       });
-      business.value = res;
+      business.value = {
+        data: res.business,
+        role: res.role,
+        hasBusiness: res.hasBusiness,
+      };
     } finally {
       setLoading(false);
     }
   };
-  const updateBusiness = async (data: BusinessInfoFormSchema) => {
+  const updateBusiness = async (
+    data: BusinessInfoFormSchema,
+    businessId: string
+  ) => {
     try {
       setLoading(true);
-      const res: Business = await $fetch("/api/business", {
+      const res = await $fetch("/api/business", {
         method: "PUT",
-        body: data,
+        body: { data: data, id: businessId },
       });
-      business.value = res;
+      business.value.data = res;
     } finally {
       setLoading(false);
     }
@@ -32,7 +43,7 @@ export const useBusiness = () => {
         method: "PUT",
         body: data,
       });
-      business.value = res;
+      business.value.data = res;
     } finally {
       setLoading(false);
     }

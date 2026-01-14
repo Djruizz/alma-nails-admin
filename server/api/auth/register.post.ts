@@ -19,7 +19,6 @@ export default defineEventHandler(async (event) => {
         full_name: validatedData.data.full_name,
         phone: validatedData.data.phone,
         born_date: validatedData.data.born_date,
-        role: "admin",
       },
     },
   });

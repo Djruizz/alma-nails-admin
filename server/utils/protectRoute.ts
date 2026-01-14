@@ -1,4 +1,4 @@
-import { serverSupabaseUser } from "#supabase/server";
+import { serverSupabaseUser, serverSupabaseClient } from "#supabase/server";
 export const authenticatedUser = async (event: any) => {
   const user = await serverSupabaseUser(event);
   if (!user) {
@@ -9,4 +9,31 @@ export const authenticatedUser = async (event: any) => {
     });
   }
   return user;
+};
+export const getBusinessId = async (event: any) => {
+  const user = await serverSupabaseUser(event);
+  if (!user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Usuario no autenticado",
+      message: "Usuario no autenticado",
+    });
+  }
+  const client = await serverSupabaseClient<Database>(event);
+  const { data: member, error } = await client
+    .from("business_members")
+    .select("business_id")
+    .eq("user_id", user.sub)
+    .maybeSingle();
+  if (error) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Perfil no encontrado",
+      message: error.message,
+    });
+  }
+  if (!member) {
+    return null;
+  }
+  return member.business_id;
 };

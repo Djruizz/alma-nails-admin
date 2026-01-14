@@ -22,11 +22,11 @@ export const useBusinessInfoForm = (formRef: any) => {
     (b) => {
       if (!b) return;
       const businessData: BusinessInfoFormSchema = {
-        name: b.name || "",
-        phone: b.phone || "",
-        address: b.address || "",
-        description: b.description || "",
-        email: b.email || "",
+        name: b.data?.name || "",
+        phone: b.data?.phone || "",
+        address: b.data?.address || "",
+        description: b.data?.description || "",
+        email: b.data?.email || "",
       };
       Object.assign(businessState, businessData);
       initialState.value = structuredClone(toRaw(businessData));
@@ -59,7 +59,7 @@ export const useBusinessInfoForm = (formRef: any) => {
     if (!result.success) return;
 
     try {
-      await updateBusiness(result.data);
+      await updateBusiness(result.data, business.value.data?.id || "");
       initialState.value = structuredClone(toRaw(businessState));
       toast.add({
         title: "Negocio actualizado",

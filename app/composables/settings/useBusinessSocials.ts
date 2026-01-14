@@ -10,8 +10,8 @@ export const useBusinessSocials = () => {
   watch(
     business,
     () => {
-      if (business.value?.social_links) {
-        const rawLinks = business.value.social_links as SocialLink[];
+      if (business.value?.data?.social_links) {
+        const rawLinks = business.value.data.social_links as SocialLink[];
         socialLinks.value = structuredClone(toRaw(rawLinks));
         originalSocialLinks.value = structuredClone(toRaw(rawLinks));
       }
