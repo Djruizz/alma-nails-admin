@@ -51,7 +51,7 @@ export const useLoginForm = () => {
       toast.add({
         title: "¡Bienvenido!",
         icon: "i-lucide-circle-check",
-        color: "primary",
+        color: "success",
       });
     } catch (error: any) {
       toast.add({

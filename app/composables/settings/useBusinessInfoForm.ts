@@ -65,7 +65,7 @@ export const useBusinessInfoForm = (formRef: any) => {
         title: "Negocio actualizado",
         description: "Se han guardado los cambios en el negocio",
         icon: "i-lucide-circle-check",
-        color: "primary",
+        color: "success",
       });
     } catch (e: any) {
       toast.add({

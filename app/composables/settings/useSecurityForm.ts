@@ -43,7 +43,7 @@ export const useSecurityForm = (formRef: any) => {
         title: "Contraseña actualizada",
         description: "Se ha actualizado la contraseña exitosamente",
         icon: "i-lucide-circle-check",
-        color: "primary",
+        color: "success",
       });
     } catch (e: any) {
       toast.add({

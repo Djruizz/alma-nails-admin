@@ -48,7 +48,7 @@ export const useRegisterForm = () => {
       toast.add({
         title: "¡Cuenta creada!",
         icon: "i-lucide-circle-check",
-        color: "primary",
+        color: "success",
       });
       navigateTo("/");
     } catch (error: any) {

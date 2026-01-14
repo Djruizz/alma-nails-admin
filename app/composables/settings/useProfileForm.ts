@@ -58,7 +58,7 @@ export const useProfileForm = (formRef: any) => {
         title: "Perfil actualizado",
         description: "Se han guardado los cambios en el perfil",
         icon: "i-lucide-circle-check",
-        color: "primary",
+        color: "success",
       });
     } catch (e: any) {
       toast.add({
