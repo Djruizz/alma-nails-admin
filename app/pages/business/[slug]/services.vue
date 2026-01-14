@@ -3,6 +3,10 @@ definePageMeta({
   middleware: "is-owner",
   layout: "admin",
 });
+const { fetchServices, createService } = useServices();
+onMounted(() => {
+  fetchServices();
+});
 
 const slug = useRoute().params.slug;
 </script>
