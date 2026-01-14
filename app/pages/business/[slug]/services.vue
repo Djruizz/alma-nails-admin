@@ -3,38 +3,75 @@ definePageMeta({
   middleware: "is-owner",
   layout: "admin",
 });
-const { fetchServices, createService } = useServices();
-onMounted(() => {
-  fetchServices();
-});
 
-const slug = useRoute().params.slug;
+const { services, fetchServices } = useServices();
+const { openCreateModal, openEditModal, confirmDelete } = useServiceModal();
+
+onMounted(async () => {
+  await fetchServices();
+});
 </script>
 
 <template>
   <UContainer class="py-8">
     <div class="space-y-6">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Servicios
-        </h1>
-        <p class="text-gray-500 dark:text-gray-400">
-          Gestiona los servicios que ofreces
-        </p>
+      <!-- Header Section -->
+      <div
+        class="flex flex-col md:flex-row md:items-center justify-between gap-4"
+      >
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Servicios
+          </h1>
+          <p class="text-gray-500 dark:text-gray-400">
+            Gestiona los servicios que ofreces
+          </p>
+        </div>
+        <UButton
+          icon="i-lucide-plus"
+          size="lg"
+          label="Agregar Servicio"
+          @click="openCreateModal"
+        />
       </div>
 
-      <UCard>
+      <!-- Services Grid -->
+      <div
+        v-if="services.length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+      >
+        <ServicesServiceCard
+          v-for="service in services"
+          :key="service.id"
+          :service="service"
+          @edit="openEditModal"
+          @delete="confirmDelete"
+        />
+      </div>
+
+      <!-- Empty State -->
+      <UCard v-else>
         <div class="text-center py-12">
           <UIcon
             name="i-lucide-sparkles"
             class="w-16 h-16 mx-auto text-gray-400 mb-4"
           />
           <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-            Próximamente
+            No hay servicios
           </h3>
-          <p class="text-gray-500">Esta página está en desarrollo</p>
+          <p class="text-gray-500 mb-6">
+            Comienza agregando tu primer servicio
+          </p>
+          <UButton
+            icon="i-lucide-plus"
+            label="Agregar Servicio"
+            @click="openCreateModal"
+          />
         </div>
       </UCard>
     </div>
+
+    <!-- Service Modal -->
+    <ServicesServiceModal />
   </UContainer>
 </template>

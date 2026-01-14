@@ -12,6 +12,7 @@ export default defineNuxtConfig({
       "@@/shared/utils",
       "composables/auth",
       "composables/settings",
+      "composables/services",
     ],
   },
   supabase: {

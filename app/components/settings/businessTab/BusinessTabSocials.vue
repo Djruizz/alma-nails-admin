@@ -22,7 +22,7 @@ const { business } = useBusiness();
       <UInput
         v-model="link.url"
         class="w-full"
-        :placeholder="business?.slug || 'url'"
+        :placeholder="business?.data?.slug || 'url'"
       />
       <UButton
         icon="i-lucide-trash-2"
