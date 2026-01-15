@@ -25,7 +25,6 @@ export const useServiceModal = () => {
     Object.assign(serviceState.value, initialState);
     editingService.value = null;
     isOpen.value = true;
-    console.log("openCreateModal");
   };
 
   const openEditModal = (service: Service) => {
@@ -37,7 +36,6 @@ export const useServiceModal = () => {
     });
     editingService.value = service;
     isOpen.value = true;
-    console.log("openEditModal", service);
   };
 
   const closeModal = () => {
