@@ -15,12 +15,11 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <UCard>
-    <div class="space-y-4">
-      <!-- Service Header -->
-      <div class="flex items-start justify-between m-0">
+  <UCard :ui="{ header: 'py-2', footer: 'py-3' }">
+    <template #header>
+      <div class="flex items-center justify-between m-0">
         <div class="flex-1">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+          <h3 class="text-lg font-semibold">
             {{ service.name }}
           </h3>
         </div>
@@ -32,21 +31,17 @@ const emit = defineEmits<{
           {{ service.is_active ? "Activo" : "Inactivo" }}
         </UBadge>
       </div>
-
-      <!-- Service Details -->
-      <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-        <p class="font-bold text-primary-600 dark:text-primary-400">
-          {{ formatPrice(service.price) }}
-        </p>
-        <USeparator orientation="vertical" class="h-4" />
-        <UIcon name="i-lucide-clock" class="w-4 h-4" />
-        <span>{{ formatDuration(service.duration_min) }}</span>
-      </div>
-
-      <!-- Actions -->
-      <div
-        class="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700"
-      >
+    </template>
+    <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+      <span class="font-bold text-primary-600 dark:text-primary-400">
+        {{ formatPrice(service.price) }}
+      </span>
+      <USeparator orientation="vertical" class="h-5" />
+      <UIcon name="i-lucide-clock" class="w-4 h-4" />
+      <span>{{ formatDuration(service.duration_min) }}</span>
+    </div>
+    <template #footer>
+      <div class="flex gap-2">
         <UButton
           icon="i-lucide-pencil"
           size="sm"
@@ -66,6 +61,6 @@ const emit = defineEmits<{
           @click="emit('delete', service)"
         />
       </div>
-    </div>
+    </template>
   </UCard>
 </template>
