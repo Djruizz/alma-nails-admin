@@ -55,7 +55,12 @@ const { isOpen, serviceState, isEditing, closeModal, saveService } =
         </UFormField>
 
         <!-- Active Toggle -->
-        <UFormField label="Estado" v-if="isEditing">
+        <UFormField
+          label="Estado"
+          v-if="isEditing"
+          orientation="horizontal"
+          class="col-span-2 p-2 mt-1 rounded-lg border border-neutral-300 dark:border-neutral-800 items-center"
+        >
           <USwitch
             v-model="serviceState.is_active"
             :label="serviceState.is_active ? 'Activo' : 'Inactivo'"
@@ -65,7 +70,7 @@ const { isOpen, serviceState, isEditing, closeModal, saveService } =
     </template>
 
     <template #footer>
-      <div class="flex justify-end gap-3">
+      <div class="flex justify-end gap-3 w-full">
         <UButton
           label="Cancelar"
           color="neutral"
