@@ -5,7 +5,15 @@ definePageMeta({
 });
 
 const { services, fetchServices } = useServices();
-const { openCreateModal, openEditModal, confirmDelete } = useServiceModal();
+const {
+  openCreateModal,
+  openEditModal,
+  openDeleteModal,
+  closeDeleteModal,
+  isDeleteModalOpen,
+  deletingService,
+  handleDelete,
+} = useServiceModal();
 
 onMounted(async () => {
   await fetchServices();
@@ -45,7 +53,7 @@ onMounted(async () => {
           :key="service.id"
           :service="service"
           @edit="openEditModal"
-          @delete="confirmDelete"
+          @delete="openDeleteModal"
         />
       </div>
 
@@ -73,5 +81,13 @@ onMounted(async () => {
 
     <!-- Service Modal -->
     <ServicesServiceModal />
+
+    <!-- Delete Confirmation Modal -->
+    <ServicesServiceDeleteModal
+      :is-open="isDeleteModalOpen"
+      :service="deletingService"
+      @close="closeDeleteModal"
+      @confirm="handleDelete"
+    />
   </UContainer>
 </template>

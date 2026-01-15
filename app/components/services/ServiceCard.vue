@@ -1,30 +1,17 @@
 <script setup lang="ts">
 interface ServiceCardProps {
   service: Service;
+  showActions?: boolean;
 }
 
-const props = defineProps<ServiceCardProps>();
+const props = withDefaults(defineProps<ServiceCardProps>(), {
+  showActions: true,
+});
 
 const emit = defineEmits<{
   edit: [service: Service];
   delete: [service: Service];
 }>();
-
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat("es-MX", {
-    style: "currency",
-    currency: "MXN",
-  }).format(price);
-};
-
-const formatDuration = (minutes: number) => {
-  if (minutes < 60) {
-    return `${minutes} min`;
-  }
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
-};
 </script>
 
 <template>

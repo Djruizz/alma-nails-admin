@@ -1,7 +1,15 @@
 export const useServiceModal = () => {
   const isOpen = useState<boolean>("service-modal-open", () => false);
+  const isDeleteModalOpen = useState<boolean>(
+    "service-delete-modal-open",
+    () => false
+  );
   const editingService = useState<Service | null>(
     "service-modal-editing",
+    () => null
+  );
+  const deletingService = useState<Service | null>(
+    "service-modal-deleting",
     () => null
   );
   const toast = useToast();
@@ -75,15 +83,30 @@ export const useServiceModal = () => {
     }
   };
 
-  const confirmDelete = async (service: Service) => {
+  const openDeleteModal = (service: Service) => {
+    deletingService.value = service;
+    isDeleteModalOpen.value = true;
+  };
+
+  const closeDeleteModal = () => {
+    isDeleteModalOpen.value = false;
+    setTimeout(() => {
+      deletingService.value = null;
+    }, 300);
+  };
+
+  const handleDelete = async () => {
+    if (!deletingService.value) return;
+
     try {
-      await deleteService(service.id);
+      await deleteService(deletingService.value.id);
       toast.add({
         title: "Servicio eliminado",
         description: "El servicio se eliminó correctamente",
         icon: "i-lucide-circle-check",
-        color: "warning",
+        color: "success",
       });
+      closeDeleteModal();
     } catch (e: any) {
       toast.add({
         title: e.statusMessage || "Error",
@@ -97,12 +120,16 @@ export const useServiceModal = () => {
 
   return {
     isOpen,
+    isDeleteModalOpen,
     serviceState,
+    deletingService,
     isEditing,
     openCreateModal,
     openEditModal,
     closeModal,
     saveService,
-    confirmDelete,
+    openDeleteModal,
+    closeDeleteModal,
+    handleDelete,
   };
 };

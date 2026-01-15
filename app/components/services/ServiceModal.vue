@@ -48,12 +48,13 @@ const formRef = useTemplateRef("formRef");
               v-model="serviceState.price"
               placeholder="0.00"
               icon="i-lucide-dollar-sign"
-              :step="10"
+              :step="1"
               :min="0"
               :format-options="{
                 style: 'currency',
                 currency: 'MXN',
                 currencyDisplay: 'narrowSymbol',
+                trailingZeroDisplay: 'stripIfInteger',
               }"
               class="w-full"
             />
