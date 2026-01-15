@@ -2,8 +2,10 @@ export const useServices = () => {
   const services = useState<Service[]>("services", () => []);
   const { setLoading } = useLoading();
 
-  const fetchServices = async () => {
-    if (services.value.length > 0) return;
+  const fetchServices = async (forceRefresh = false) => {
+    // Skip fetch if services already loaded and not forcing refresh
+    if (services.value.length > 0 && !forceRefresh) return;
+
     try {
       setLoading(true);
       const res: Service[] = await $fetch("/api/services", {
@@ -65,11 +67,16 @@ export const useServices = () => {
     }
   };
 
+  const clearServices = () => {
+    services.value = [];
+  };
+
   return {
     services,
     fetchServices,
     createService,
     updateService,
     deleteService,
+    clearServices,
   };
 };

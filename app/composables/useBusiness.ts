@@ -49,10 +49,19 @@ export const useBusiness = () => {
     }
   };
 
+  const clearBusiness = () => {
+    business.value = {
+      data: null,
+      role: null,
+      hasBusiness: false,
+    };
+  };
+
   return {
     business,
     fetchBusiness,
     updateBusiness,
     updateSocialLinks,
+    clearBusiness,
   };
 };

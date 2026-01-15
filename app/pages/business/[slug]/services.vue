@@ -36,6 +36,7 @@ onMounted(async () => {
           </p>
         </div>
         <UButton
+          v-if="services.length > 0"
           icon="i-lucide-plus"
           size="lg"
           label="Agregar Servicio"

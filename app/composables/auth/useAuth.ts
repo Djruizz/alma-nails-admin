@@ -22,6 +22,10 @@ export const useAuth = () => {
     });
   };
   const logout = async () => {
+    setLoading(true);
+    const { clearAllState } = useClearState();
+    clearAllState();
+
     const { error } = await client.auth.signOut();
     if (error) {
       throw createError({
@@ -30,6 +34,7 @@ export const useAuth = () => {
         statusMessage: "Error de cierre de sesión",
       });
     }
+    setLoading(false);
     navigateTo("/login");
   };
   const updatePassword = async (data: ChangePasswordSchema) => {

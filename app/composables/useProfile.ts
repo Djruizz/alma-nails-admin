@@ -25,12 +25,15 @@ export const useProfile = () => {
       setLoading(false);
     }
   };
-
+  const clearProfile = () => {
+    profile.value = null;
+  };
   const firstName = computed(() => profile.value?.full_name?.split(" ")[0]);
   return {
     profile,
     firstName,
     fetchProfile,
     updateProfile,
+    clearProfile,
   };
 };
