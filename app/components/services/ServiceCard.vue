@@ -31,14 +31,11 @@ const formatDuration = (minutes: number) => {
   <UCard>
     <div class="space-y-4">
       <!-- Service Header -->
-      <div class="flex items-start justify-between">
+      <div class="flex items-start justify-between m-0">
         <div class="flex-1">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
             {{ service.name }}
           </h3>
-          <p class="text-2xl font-bold text-primary-600 dark:text-primary-400">
-            {{ formatPrice(service.price) }}
-          </p>
         </div>
         <UBadge
           :color="service.is_active ? 'success' : 'neutral'"
@@ -50,9 +47,11 @@ const formatDuration = (minutes: number) => {
       </div>
 
       <!-- Service Details -->
-      <div
-        class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
-      >
+      <div class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+        <p class="font-bold text-primary-600 dark:text-primary-400">
+          {{ formatPrice(service.price) }}
+        </p>
+        <USeparator orientation="vertical" class="h-4" />
         <UIcon name="i-lucide-clock" class="w-4 h-4" />
         <span>{{ formatDuration(service.duration_min) }}</span>
       </div>
@@ -65,18 +64,18 @@ const formatDuration = (minutes: number) => {
           icon="i-lucide-pencil"
           size="sm"
           color="neutral"
-          variant="ghost"
+          variant="outline"
           label="Editar"
-          class="flex-1"
+          class="flex-1 justify-center"
           @click="emit('edit', service)"
         />
         <UButton
           icon="i-lucide-trash-2"
           size="sm"
           color="error"
-          variant="ghost"
+          variant="subtle"
           label="Eliminar"
-          class="flex-1"
+          class="flex-1 justify-center"
           @click="emit('delete', service)"
         />
       </div>

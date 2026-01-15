@@ -24,7 +24,7 @@ onMounted(() => {
       <AuthProfileButton />
     </template>
   </UHeader>
-  <UMain class="mb-16">
+  <UMain class="pb-16">
     <div
       v-if="isLoading"
       class="fixed inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm"
