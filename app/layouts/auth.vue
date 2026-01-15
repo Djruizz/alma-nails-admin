@@ -2,10 +2,10 @@
   <UContainer>
     <UHeader :toggle="false">
       <template #title>
-        <h1>Alma Nails</h1>
+        <h1>Portal de Clientes</h1>
       </template>
       <template #right>
-        <UColorModeButton/>
+        <UColorModeButton />
       </template>
     </UHeader>
     <UMain class="flex flex-col flex-1">
