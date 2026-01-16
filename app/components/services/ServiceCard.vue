@@ -40,7 +40,7 @@ const emit = defineEmits<{
       <UIcon name="i-lucide-clock" class="w-4 h-4" />
       <span>{{ formatDuration(service.duration_min) }}</span>
     </div>
-    <template #footer>
+    <template #footer v-if="showActions">
       <div class="flex gap-2">
         <UButton
           icon="i-lucide-pencil"
