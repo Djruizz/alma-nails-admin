@@ -6,7 +6,7 @@ export default defineEventHandler(async (event): Promise<{ ok: boolean }> => {
   const client = await serverSupabaseClient<Database>(event);
 
   const query = getQuery(event);
-  const serviceId = query.id as number | undefined;
+  const serviceId = query.id as string | undefined;
 
   // Verificar que se proporcione un ID
   if (!serviceId) {

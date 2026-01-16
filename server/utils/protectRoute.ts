@@ -32,8 +32,12 @@ export const getBusinessId = async (event: any) => {
       message: error.message,
     });
   }
-  if (!member) {
-    return null;
+  if (!member?.business_id) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Perfil no encontrado",
+      message: "Perfil no encontrado",
+    });
   }
   return member.business_id;
 };
