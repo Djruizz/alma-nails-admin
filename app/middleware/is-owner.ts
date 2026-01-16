@@ -2,13 +2,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const supabase = useSupabaseClient();
   const user = useSupabaseUser();
 
-  // Si no hay usuario, intentar obtener la sesión de Supabase
   if (!user.value) {
     const {
       data: { session },
     } = await supabase.auth.getSession();
-
-    // Si no hay sesión después de intentar obtenerla, redirigir al login
     if (!session) {
       return navigateTo({
         path: "/login",
@@ -19,7 +16,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   const routeSlug = to.params.slug;
 
-  // Verificar si el negocio existe
   const { data: business, error: businessError } = await supabase
     .from("business_profiles")
     .select("id, slug")

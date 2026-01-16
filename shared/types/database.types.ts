@@ -17,34 +17,37 @@ export type Database = {
       appointments: {
         Row: {
           business_id: string
-          client_id: number | null
+          client_id: string
           created_at: string
           end_time: string
-          id: number
+          id: string
           price_at_booking: number
-          service_id: number | null
+          professional_id: string
+          service_id: string
           start_time: string
           status: string | null
         }
         Insert: {
           business_id: string
-          client_id?: number | null
+          client_id: string
           created_at?: string
           end_time: string
-          id?: number
+          id?: string
           price_at_booking: number
-          service_id?: number | null
+          professional_id?: string
+          service_id: string
           start_time: string
           status?: string | null
         }
         Update: {
           business_id?: string
-          client_id?: number | null
+          client_id?: string
           created_at?: string
           end_time?: string
-          id?: number
+          id?: string
           price_at_booking?: number
-          service_id?: number | null
+          professional_id?: string
+          service_id?: string
           start_time?: string
           status?: string | null
         }
@@ -64,6 +67,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "appointments_professional_id_fkey"
+            columns: ["professional_id"]
+            isOneToOne: false
+            referencedRelation: "business_members"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "appointments_service_id_fkey"
             columns: ["service_id"]
             isOneToOne: false
@@ -77,25 +87,28 @@ export type Database = {
           business_id: string
           created_at: string | null
           full_name: string
-          id: number
+          id: string
           notes: string | null
           phone: string
+          user_id: string
         }
         Insert: {
           business_id: string
           created_at?: string | null
           full_name: string
-          id?: number
+          id?: string
           notes?: string | null
           phone: string
+          user_id: string
         }
         Update: {
           business_id?: string
           created_at?: string | null
           full_name?: string
-          id?: number
+          id?: string
           notes?: string | null
           phone?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -111,21 +124,21 @@ export type Database = {
         Row: {
           business_id: string | null
           created_at: string
-          id: number
+          id: string
           role: Database["public"]["Enums"]["member_role"] | null
           user_id: string | null
         }
         Insert: {
           business_id?: string | null
           created_at?: string
-          id?: number
+          id?: string
           role?: Database["public"]["Enums"]["member_role"] | null
           user_id?: string | null
         }
         Update: {
           business_id?: string | null
           created_at?: string
-          id?: number
+          id?: string
           role?: Database["public"]["Enums"]["member_role"] | null
           user_id?: string | null
         }
@@ -135,6 +148,13 @@ export type Database = {
             columns: ["business_id"]
             isOneToOne: false
             referencedRelation: "business_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "business_members_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -200,7 +220,6 @@ export type Database = {
           full_name: string
           id: string
           phone: string | null
-          role: Database["public"]["Enums"]["role"]
         }
         Insert: {
           born_date?: string | null
@@ -208,7 +227,6 @@ export type Database = {
           full_name: string
           id?: string
           phone?: string | null
-          role?: Database["public"]["Enums"]["role"]
         }
         Update: {
           born_date?: string | null
@@ -216,7 +234,6 @@ export type Database = {
           full_name?: string
           id?: string
           phone?: string | null
-          role?: Database["public"]["Enums"]["role"]
         }
         Relationships: []
       }
@@ -224,7 +241,7 @@ export type Database = {
         Row: {
           business_id: string | null
           duration_min: number
-          id: number
+          id: string
           is_active: boolean | null
           name: string
           price: number
@@ -232,7 +249,7 @@ export type Database = {
         Insert: {
           business_id?: string | null
           duration_min: number
-          id?: number
+          id?: string
           is_active?: boolean | null
           name: string
           price: number
@@ -240,7 +257,7 @@ export type Database = {
         Update: {
           business_id?: string | null
           duration_min?: number
-          id?: number
+          id?: string
           is_active?: boolean | null
           name?: string
           price?: number
@@ -260,9 +277,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      check_is_staff: { Args: { _business_id: string }; Returns: boolean }
-      is_admin: { Args: never; Returns: boolean }
-      owns_business: { Args: { business: string }; Returns: boolean }
+      has_business_permission: {
+        Args: {
+          check_business_id: string
+          required_role: Database["public"]["Enums"]["member_role"]
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       member_role: "owner"
