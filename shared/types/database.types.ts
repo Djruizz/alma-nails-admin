@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       appointments: {
         Row: {
+          appointment_date: string
           business_id: string
           client_id: string
           created_at: string
@@ -28,6 +29,7 @@ export type Database = {
           status: string | null
         }
         Insert: {
+          appointment_date: string
           business_id: string
           client_id: string
           created_at?: string
@@ -40,6 +42,7 @@ export type Database = {
           status?: string | null
         }
         Update: {
+          appointment_date?: string
           business_id?: string
           client_id?: string
           created_at?: string
@@ -175,6 +178,7 @@ export type Database = {
           schedule_config: Json | null
           slug: string
           social_links: Json | null
+          timezone: string | null
           updated_at: string | null
         }
         Insert: {
@@ -192,6 +196,7 @@ export type Database = {
           schedule_config?: Json | null
           slug: string
           social_links?: Json | null
+          timezone?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -209,6 +214,7 @@ export type Database = {
           schedule_config?: Json | null
           slug?: string
           social_links?: Json | null
+          timezone?: string | null
           updated_at?: string | null
         }
         Relationships: []
@@ -265,6 +271,82 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "services_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "business_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      time_slot_overrides: {
+        Row: {
+          business_id: string
+          created_at: string | null
+          date: string
+          id: number
+          is_available: boolean
+          reason: string | null
+          start_time: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          business_id: string
+          created_at?: string | null
+          date: string
+          id?: number
+          is_available: boolean
+          reason?: string | null
+          start_time?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          business_id?: string
+          created_at?: string | null
+          date?: string
+          id?: number
+          is_available?: boolean
+          reason?: string | null
+          start_time?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "time_slot_overrides_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "business_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      time_slot_templates: {
+        Row: {
+          business_id: string
+          created_at: string
+          day_of_week: number
+          id: string
+          is_active: boolean
+          start_time: string
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          day_of_week: number
+          id?: string
+          is_active: boolean
+          start_time: string
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          day_of_week?: number
+          id?: string
+          is_active?: boolean
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "time_slot_templates_business_id_fkey"
             columns: ["business_id"]
             isOneToOne: false
             referencedRelation: "business_profiles"

@@ -25,3 +25,7 @@ export const passwordSchema = z
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/,
     "La contraseña debe contener al menos una mayúscula, una minúscula, un número y un carácter especial"
   );
+
+export const timeSchema = z
+  .string("Hora inválida")
+  .regex(/^\d{2}:\d{2}$/, "Hora inválida");
