@@ -1,14 +1,7 @@
 import { serverSupabaseClient } from "#supabase/server";
 export default defineEventHandler(async (event) => {
-  const user = await authenticatedUser(event);
-  if (!user) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: "Usuario no autenticado",
-      message: "Usuario no autenticado",
-    });
-  }
   const businessId = await getBusinessId(event);
+
   const client = await serverSupabaseClient<Database>(event);
   const { data: appointments, error } = await client
     .from("appointments")

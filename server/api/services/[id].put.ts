@@ -1,25 +1,20 @@
 import { serverSupabaseClient } from "#supabase/server";
-import { authenticatedUser } from "@@/server/utils/protectRoute";
 import { serviceUpdateSchema } from "@@/shared/schemas/ServiceSchema";
 import type { Service } from "@@/shared/types/service.types";
 
 export default defineEventHandler(async (event): Promise<Service> => {
-  await authenticatedUser(event);
-  const client = await serverSupabaseClient<Database>(event);
+  const id = getRouterParams(event).id;
 
-  const body = await readBody(event);
-
-  // Verificar que se proporcione un ID
-  if (!body.id) {
+  if (!id) {
     throw createError({
       statusCode: 400,
       statusMessage: "Datos invalidos",
       message: "No se proporciono un ID de servicio",
     });
   }
-
+  const body = await readBody(event);
   // Validar los datos con Zod
-  const validatedData = serviceUpdateSchema.safeParse(body.data);
+  const validatedData = serviceUpdateSchema.safeParse(body);
   if (!validatedData.success) {
     throw createError({
       statusCode: 400,
@@ -37,11 +32,11 @@ export default defineEventHandler(async (event): Promise<Service> => {
     });
   }
 
-  // Actualizar el servicio
+  const client = await serverSupabaseClient<Database>(event);
   const { data: service, error } = await client
     .from("services")
     .update(validatedData.data)
-    .eq("id", body.id)
+    .eq("id", id)
     .select()
     .single();
 

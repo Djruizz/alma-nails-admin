@@ -21,15 +21,12 @@ export const useBusiness = () => {
       setLoading(false);
     }
   };
-  const updateBusiness = async (
-    data: BusinessInfoFormSchema,
-    businessId: string
-  ) => {
+  const updateBusiness = async (data: BusinessInfoFormSchema) => {
     try {
       setLoading(true);
       const res = await $fetch("/api/business", {
         method: "PUT",
-        body: { data: data, id: businessId },
+        body: { data: data },
       });
       business.value.data = res;
     } finally {

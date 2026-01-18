@@ -3,7 +3,6 @@ import { profileFormSchema } from "@@/shared/schemas/ProfileFormSchema";
 import { authenticatedUser } from "@@/server/utils/protectRoute";
 export default defineEventHandler(async (event): Promise<Profile> => {
   const user = await authenticatedUser(event);
-  const client = await serverSupabaseClient<Database>(event);
 
   const body = await readBody(event);
   const validatedData = profileFormSchema.safeParse(body);
@@ -14,6 +13,7 @@ export default defineEventHandler(async (event): Promise<Profile> => {
       statusMessage: "Datos invalidos",
     });
   }
+  const client = await serverSupabaseClient<Database>(event);
   const { data: profile, error } = await client
     .from("profiles")
     .update(validatedData.data)

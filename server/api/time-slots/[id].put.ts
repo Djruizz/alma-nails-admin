@@ -3,12 +3,18 @@ import { updateTimeSlotTemplateSchema } from "@@/shared/schemas/TimeSlotTemplate
 
 export default defineEventHandler(async (event) => {
   const businessId = await getBusinessId(event);
-  const client = await serverSupabaseClient<Database>(event);
 
   const body = await readBody(event);
   const id = getRouterParams(event).id;
-  const validatedData = updateTimeSlotTemplateSchema.safeParse(body);
+  if (!id) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "No se proporciono un ID",
+      message: "No se proporciono un ID de plantilla de horario",
+    });
+  }
 
+  const validatedData = updateTimeSlotTemplateSchema.safeParse(body);
   if (!validatedData.success) {
     throw createError({
       statusCode: 400,
@@ -23,6 +29,7 @@ export default defineEventHandler(async (event) => {
       message: "No se proporcionaron campos para actualizar",
     });
   }
+  const client = await serverSupabaseClient<Database>(event);
   const { data: timeSlot, error } = await client
     .from("time_slot_templates")
     .update(validatedData.data)

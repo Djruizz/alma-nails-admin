@@ -59,7 +59,7 @@ export const useBusinessInfoForm = (formRef: any) => {
     if (!result.success) return;
 
     try {
-      await updateBusiness(result.data, business.value.data?.id || "");
+      await updateBusiness(result.data);
       initialState.value = structuredClone(toRaw(businessState));
       toast.add({
         title: "Negocio actualizado",

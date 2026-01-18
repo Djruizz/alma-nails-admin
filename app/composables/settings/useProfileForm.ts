@@ -61,6 +61,7 @@ export const useProfileForm = (formRef: any) => {
         color: "success",
       });
     } catch (e: any) {
+      Object.assign(profileState, initialProfile.value);
       toast.add({
         title: e.statusMessage || "Error",
         description:

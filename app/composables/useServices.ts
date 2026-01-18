@@ -32,36 +32,28 @@ export const useServices = () => {
     }
   };
 
-  const updateService = async (id: number, data: ServiceUpdateSchema) => {
+  const updateService = async (id: string, data: ServiceUpdateSchema) => {
     try {
       setLoading(true);
-      const res: Service = await $fetch("/api/services", {
+      const res: Service = await $fetch(`/api/services/${id}`, {
         method: "PUT",
-        body: {
-          id,
-          data,
-        },
+        body: data,
       });
-      // Update the service in the array
-      const index = services.value.findIndex((s) => s.id === id);
-      if (index !== -1) {
-        services.value[index] = res;
-      }
-      return res;
+      services.value = services.value.map((service) =>
+        service.id === id ? res : service
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const deleteService = async (id: number) => {
+  const deleteService = async (id: string) => {
     try {
       setLoading(true);
-      await $fetch("/api/services", {
+      await $fetch(`/api/services/${id}`, {
         method: "DELETE",
-        query: { id },
       });
-      // Remove the service from the array
-      services.value = services.value.filter((s) => s.id !== id);
+      services.value = services.value.filter((service) => service.id !== id);
     } finally {
       setLoading(false);
     }

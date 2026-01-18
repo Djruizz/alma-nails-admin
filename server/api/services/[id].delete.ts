@@ -3,12 +3,8 @@ import { authenticatedUser } from "@@/server/utils/protectRoute";
 
 export default defineEventHandler(async (event): Promise<{ ok: boolean }> => {
   await authenticatedUser(event);
-  const client = await serverSupabaseClient<Database>(event);
 
-  const query = getQuery(event);
-  const serviceId = query.id as string | undefined;
-
-  // Verificar que se proporcione un ID
+  const serviceId = getRouterParams(event).id;
   if (!serviceId) {
     throw createError({
       statusCode: 400,
@@ -16,8 +12,8 @@ export default defineEventHandler(async (event): Promise<{ ok: boolean }> => {
       message: "No se proporciono un ID de servicio",
     });
   }
+  const client = await serverSupabaseClient<Database>(event);
 
-  // Eliminar el servicio
   const { error } = await client.from("services").delete().eq("id", serviceId);
 
   if (error) {

@@ -1,10 +1,11 @@
 import { serverSupabaseClient } from "#supabase/server";
 import { businessInfoFormSchema } from "@@/shared/schemas/BusinessInfoFormSchema";
 export default defineEventHandler(async (event): Promise<Business> => {
+  const businessId = await getBusinessId(event);
   const client = await serverSupabaseClient<Database>(event);
 
   const body = await readBody(event);
-  if (!body.id) {
+  if (!businessId) {
     throw createError({
       statusCode: 400,
       message: "No se proporciono un id",
@@ -22,7 +23,7 @@ export default defineEventHandler(async (event): Promise<Business> => {
   const { data: business, error } = await client
     .from("business_profiles")
     .update(validatedData.data)
-    .eq("id", body.id)
+    .eq("id", businessId)
     .select()
     .single();
   if (error) {
