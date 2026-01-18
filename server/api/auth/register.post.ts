@@ -29,5 +29,16 @@ export default defineEventHandler(async (event) => {
       message: authError.message,
     });
   }
+  const { error: loginError } = await client.auth.signInWithPassword({
+    email: validatedData.data.email,
+    password: validatedData.data.password,
+  });
+  if (loginError) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: "Error al iniciar sesión",
+      message: loginError.message,
+    });
+  }
   return { ok: true };
 });

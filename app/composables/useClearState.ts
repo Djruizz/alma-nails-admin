@@ -6,6 +6,9 @@ export const useClearState = () => {
     const { clearServices } = useServices();
     clearServices();
 
+    const { clearClients } = useClients();
+    clearClients();
+
     const { clearBusiness } = useBusiness();
     clearBusiness();
   };

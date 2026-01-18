@@ -70,6 +70,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "appointments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "business_clients_with_profiles"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "appointments_professional_id_fkey"
             columns: ["professional_id"]
             isOneToOne: false
@@ -88,29 +95,23 @@ export type Database = {
       business_clients: {
         Row: {
           business_id: string
-          created_at: string | null
-          full_name: string
+          created_at: string
           id: string
           notes: string | null
-          phone: string
           user_id: string
         }
         Insert: {
           business_id: string
-          created_at?: string | null
-          full_name: string
+          created_at?: string
           id?: string
           notes?: string | null
-          phone: string
           user_id: string
         }
         Update: {
           business_id?: string
-          created_at?: string | null
-          full_name?: string
+          created_at?: string
           id?: string
           notes?: string | null
-          phone?: string
           user_id?: string
         }
         Relationships: [
@@ -119,6 +120,13 @@ export type Database = {
             columns: ["business_id"]
             isOneToOne: false
             referencedRelation: "business_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "business_clients_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -283,7 +291,7 @@ export type Database = {
           business_id: string
           created_at: string | null
           date: string
-          id: number
+          id: string
           is_available: boolean
           reason: string | null
           start_time: string | null
@@ -293,7 +301,7 @@ export type Database = {
           business_id: string
           created_at?: string | null
           date: string
-          id?: number
+          id?: string
           is_available: boolean
           reason?: string | null
           start_time?: string | null
@@ -303,7 +311,7 @@ export type Database = {
           business_id?: string
           created_at?: string | null
           date?: string
-          id?: number
+          id?: string
           is_available?: boolean
           reason?: string | null
           start_time?: string | null
@@ -356,7 +364,25 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      business_clients_with_profiles: {
+        Row: {
+          business_id: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+          notes: string | null
+          phone: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_clients_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "business_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       has_business_permission: {
