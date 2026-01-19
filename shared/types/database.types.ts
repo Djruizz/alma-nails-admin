@@ -97,6 +97,7 @@ export type Database = {
           business_id: string
           created_at: string
           id: string
+          is_active: boolean
           notes: string | null
           user_id: string
         }
@@ -104,6 +105,7 @@ export type Database = {
           business_id: string
           created_at?: string
           id?: string
+          is_active: boolean
           notes?: string | null
           user_id: string
         }
@@ -111,6 +113,7 @@ export type Database = {
           business_id?: string
           created_at?: string
           id?: string
+          is_active?: boolean
           notes?: string | null
           user_id?: string
         }
@@ -370,6 +373,7 @@ export type Database = {
           created_at: string | null
           full_name: string | null
           id: string | null
+          is_active: boolean | null
           notes: string | null
           phone: string | null
         }
