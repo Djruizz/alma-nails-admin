@@ -1,5 +1,5 @@
 export const useClients = () => {
-  const clients = useState<Client[]>("clients", () => []);
+  const clients = useState<ClientWithProfile[]>("clients", () => []);
   const { setLoading } = useLoading();
 
   const fetchClients = async (forceRefresh = false, searchTerm?: string) => {
@@ -11,7 +11,7 @@ export const useClients = () => {
       const url = searchTerm
         ? `/api/clients?search=${encodeURIComponent(searchTerm)}`
         : "/api/clients";
-      const res: Client[] = await $fetch(url, {
+      const res: ClientWithProfile[] = await $fetch(url, {
         method: "GET",
       });
       clients.value = res;
@@ -23,7 +23,7 @@ export const useClients = () => {
   const createClient = async (data: ClientSchema) => {
     try {
       setLoading(true);
-      const res: Client = await $fetch("/api/clients", {
+      const res: ClientWithProfile = await $fetch("/api/clients", {
         method: "POST",
         body: data,
       });
@@ -38,7 +38,7 @@ export const useClients = () => {
   const updateClient = async (id: string, data: ClientUpdateSchema) => {
     try {
       setLoading(true);
-      const res: Client = await $fetch(`/api/clients/${id}`, {
+      const res: ClientWithProfile = await $fetch(`/api/clients/${id}`, {
         method: "PUT",
         body: data,
       });
