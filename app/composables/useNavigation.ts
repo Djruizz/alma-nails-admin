@@ -62,5 +62,6 @@ export const useNavigation = () => {
     desktopMenu,
     mobileMenu,
     settingsButton,
+    baseRoute,
   };
 };

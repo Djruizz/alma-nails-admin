@@ -12,13 +12,15 @@ export default defineEventHandler(async (event): Promise<ClientResponse[]> => {
 
   let queryBuilder = client
     .from("business_clients_with_profiles") // Consultas la vista
-    .select("id, full_name, phone, notes, created_at, is_active")
+    .select(
+      `id, full_name, phone, notes, created_at, is_active, born_date, email`
+    )
     .eq("business_id", businessId);
 
   if (searchTerm) {
     queryBuilder = queryBuilder.or(
-      `full_name.ilike.%${searchTerm}%,notes.ilike.%${searchTerm}%`
-    ); 
+      `full_name.ilike.%${searchTerm}%,notes.ilike.%${searchTerm}%,phone.ilike.%${searchTerm}%`
+    );
   }
 
   const { data: clients, error } = await queryBuilder;

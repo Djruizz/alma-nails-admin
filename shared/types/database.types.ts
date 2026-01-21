@@ -369,8 +369,10 @@ export type Database = {
     Views: {
       business_clients_with_profiles: {
         Row: {
+          born_date: string | null
           business_id: string | null
           created_at: string | null
+          email: string | null
           full_name: string | null
           id: string | null
           is_active: boolean | null

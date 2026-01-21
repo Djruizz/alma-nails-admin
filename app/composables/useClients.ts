@@ -20,6 +20,19 @@ export const useClients = () => {
     }
   };
 
+  const fetchClient = async (id: string) => {
+    try {
+      setLoading(true);
+      const url = `/api/clients/${id}`;
+      const res: ClientWithProfile = await $fetch(url, {
+        method: "GET",
+      });
+      return res;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const createClient = async (data: ClientSchema) => {
     try {
       setLoading(true);
@@ -69,6 +82,7 @@ export const useClients = () => {
   return {
     clients,
     fetchClients,
+    fetchClient,
     createClient,
     updateClient,
     deleteClient,

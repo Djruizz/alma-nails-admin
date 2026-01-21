@@ -3,10 +3,14 @@ definePageMeta({
   middleware: "is-owner",
   layout: "admin",
 });
+const { baseRoute } = useNavigation();
 const { clients, fetchClients } = useClients();
 onMounted(async () => {
   await fetchClients();
 });
+const navigateToClient = (id: string) => {
+  navigateTo(`${baseRoute.value}/clients/${id}`);
+};
 </script>
 
 <template>
@@ -16,19 +20,31 @@ onMounted(async () => {
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Clientes
         </h1>
-        <p class="text-gray-500">
-          Gestiona tus clientes y suscripciones
-        </p>
+        <p class="text-gray-500">Gestiona tus clientes y suscripciones</p>
       </div>
       <div class="grid grid-cols-3 gap-4">
-
-        <UInput placeholder="Buscar cliente" icon="i-lucide-search" class="col-span-2" size="lg" />
+        <UInput
+          placeholder="Buscar cliente"
+          icon="i-lucide-search"
+          class="col-span-2"
+          size="lg"
+        />
         <UDropdownMenu>
-          <UButton label="Ordenar" icon="i-lucide-filter" variant="subtle" color="neutral" />
+          <UButton
+            label="Ordenar"
+            icon="i-lucide-filter"
+            variant="subtle"
+            color="neutral"
+          />
         </UDropdownMenu>
       </div>
       <USeparator />
-      <ClientsClientCard v-for="client in clients" :key="client.id ?? ''" :client="client" />
+      <ClientsClientCard
+        v-for="client in clients"
+        :key="client.id ?? ''"
+        :client="client"
+        @click="navigateToClient(client.id ?? '')"
+      />
     </div>
   </UContainer>
 </template>
