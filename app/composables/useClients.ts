@@ -20,18 +20,21 @@ export const useClients = () => {
     }
   };
 
-  const fetchClient = async (id: string) => {
+  const fetchClient = async (id: string): Promise<ClientWithProfile | null> => {
+    const existing = clients.value.find(c => c.id === id)
+    if (existing) return existing
+  
     try {
-      setLoading(true);
-      const url = `/api/clients/${id}`;
-      const res: ClientWithProfile = await $fetch(url, {
-        method: "GET",
-      });
-      return res;
+      setLoading(true)
+      const { data } = await useAsyncData<ClientWithProfile>(
+        `client-${id}`,
+        () => $fetch<ClientWithProfile>(`/api/clients/${id}`)
+      )
+      return data.value ?? null
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const createClient = async (data: ClientSchema) => {
     try {
