@@ -1,8 +1,8 @@
 import { serverSupabaseClient } from "#supabase/server";
-import { authenticatedUser } from "@@/server/utils/protectRoute";
+import { getBusinessId } from "@@/server/utils/protectRoute";
 
 export default defineEventHandler(async (event): Promise<{ ok: boolean }> => {
-  await authenticatedUser(event);
+  const businessId = await getBusinessId(event);
 
   const clientId = getRouterParams(event).id;
   if (!clientId) {
@@ -18,7 +18,8 @@ export default defineEventHandler(async (event): Promise<{ ok: boolean }> => {
   const { error } = await client
     .from("business_clients")
     .delete()
-    .eq("id", clientId);
+    .eq("id", clientId)
+    .eq("business_id", businessId);
 
   if (error) {
     throw createError({

@@ -13,6 +13,7 @@ export default defineNuxtConfig({
       "composables/auth",
       "composables/settings",
       "composables/services",
+      "composables/clients",
     ],
   },
   supabase: {
