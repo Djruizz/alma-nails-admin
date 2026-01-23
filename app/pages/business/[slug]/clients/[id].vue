@@ -26,13 +26,7 @@ const clientBirthday = computed(() =>
 );
 </script>
 <template>
-  <UButton
-    label="Go Back"
-    icon="i-lucide-arrow-left"
-    @click="useRouter().back()"
-    variant="ghost"
-    class="my-2"
-  />
+  <UiGoBackButton label="Regresar" />
   <UCard class="m-4 bg-gray-50 dark:bg-gray-900">
     <template #header>
       <div class="flex justify-between items-center">
@@ -44,11 +38,8 @@ const clientBirthday = computed(() =>
             Desde el {{ formatDate(client?.created_at ?? "") }}
           </p>
         </div>
-        <UBadge
-          :label="client?.is_active ? 'Activo' : 'Inactivo'"
-          :color="client?.is_active ? 'success' : 'error'"
-          variant="subtle"
-        />
+        <UBadge :label="client?.is_active ? 'Activo' : 'Inactivo'" :color="client?.is_active ? 'success' : 'error'"
+          variant="subtle" />
       </div>
     </template>
     <template #default>
@@ -77,12 +68,7 @@ const clientBirthday = computed(() =>
       </UFormField>
     </template>
     <template #footer>
-      <UButton
-        label="Borrar cliente"
-        @click="deleteClient(clientId)"
-        color="error"
-        variant="subtle"
-      />
+      <UButton label="Borrar cliente" @click="deleteClient(clientId)" color="error" variant="subtle" />
     </template>
   </UCard>
 </template>
