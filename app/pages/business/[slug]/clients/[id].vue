@@ -3,43 +3,27 @@ definePageMeta({
   middleware: "is-owner",
   layout: "admin",
 });
-const { fetchClient, deleteClient } = useClients();
-const clientId = useRoute().params.id?.toString();
-if (!clientId) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: "Cliente no encontrado",
-  });
-}
-const client = ref<ClientWithProfile | null>(null);
-
-client.value = await fetchClient(clientId);
-
-const clientNotes = computed(() => client.value?.notes ?? "");
-
-const clientBirthday = computed(() =>
-  formatDate(client.value?.born_date ?? "", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  })
-);
+const { client, clientNotes, clientBirthday, deleteClientById } =
+  useClientView();
 </script>
 <template>
   <UiGoBackButton label="Regresar" />
-  <UCard class="m-4 bg-gray-50 dark:bg-gray-900">
+  <UCard v-if="client" class="m-4 bg-gray-50 dark:bg-gray-900">
     <template #header>
       <div class="flex justify-between items-center">
         <div>
           <h1 class="text-xl font-semibold">
-            Cliente: {{ client?.full_name }}
+            {{ client?.full_name }}
           </h1>
           <p class="text-sm">
             Desde el {{ formatDate(client?.created_at ?? "") }}
           </p>
         </div>
-        <UBadge :label="client?.is_active ? 'Activo' : 'Inactivo'" :color="client?.is_active ? 'success' : 'error'"
-          variant="subtle" />
+        <UBadge
+          :label="client?.is_active ? 'Activo' : 'Inactivo'"
+          :color="client?.is_active ? 'success' : 'error'"
+          variant="subtle"
+        />
       </div>
     </template>
     <template #default>
@@ -68,7 +52,21 @@ const clientBirthday = computed(() =>
       </UFormField>
     </template>
     <template #footer>
-      <UButton label="Borrar cliente" @click="deleteClient(clientId)" color="error" variant="subtle" />
+      <UButton
+        label="Borrar cliente"
+        @click="deleteClientById()"
+        color="error"
+        variant="subtle"
+      />
+    </template>
+  </UCard>
+  <UCard v-else class="m-4 bg-gray-50 dark:bg-gray-900">
+    <template #header>
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-xl font-semibold">Cliente no encontrado</h1>
+        </div>
+      </div>
     </template>
   </UCard>
 </template>
