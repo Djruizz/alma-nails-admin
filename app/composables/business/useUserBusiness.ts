@@ -55,7 +55,7 @@ export const useUserBusiness = () => {
   const navigateToBusinessDashboard = async () => {
     const slug = await getBusinessSlug();
     if (slug) {
-      await navigateTo(`/business/${slug}/dashboard`);
+      await navigateTo(`/business/${slug}/admin/dashboard`);
     } else {
       console.warn("El usuario no tiene un negocio asociado");
       await navigateTo("/");

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: "is-owner",
   layout: "admin",
 });
 

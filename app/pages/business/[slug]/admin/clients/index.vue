@@ -1,15 +1,14 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: "is-owner",
   layout: "admin",
 });
-const { baseRoute } = useNavigation();
+const { baseAdminRoute } = useNavigation();
 const { clients, fetchClients } = useClients();
 onMounted(async () => {
   await fetchClients();
 });
 const navigateToClient = (id: string) => {
-  navigateTo(`${baseRoute.value}/clients/${id}`);
+  navigateTo(`${baseAdminRoute.value}/clients/${id}`);
 };
 </script>
 

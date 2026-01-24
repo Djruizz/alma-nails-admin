@@ -41,7 +41,7 @@ export const useLoginForm = () => {
 
         if (member && member.business_profiles) {
           const slug = member.business_profiles.slug;
-          await navigateTo(`/business/${slug}/dashboard`);
+          await navigateTo(`/business/${slug}/admin/dashboard`);
         } else {
           // Si no tiene negocio, ir a la página principal
           await navigateTo("/");

@@ -1,7 +1,7 @@
 export const useClientView = () => {
   const { fetchClient, deleteClient } = useClients();
   const route = useRoute();
-  const { baseRoute } = useNavigation();
+  const { baseAdminRoute } = useNavigation();
   const clientId = route.params.id?.toString();
   const toast = useToast();
   if (!clientId) {
@@ -58,7 +58,7 @@ export const useClientView = () => {
   const deleteClientById = async () => {
     try {
       await deleteClient(clientId);
-      await navigateTo(`${baseRoute.value}/clients`);
+      await navigateTo(`${baseAdminRoute.value}/clients`);
     } catch (e: any) {
       toast.add({
         title: "Error",

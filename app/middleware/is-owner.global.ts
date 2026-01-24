@@ -2,6 +2,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const supabase = useSupabaseClient();
   const user = useSupabaseUser();
 
+  // Only apply strict permissions check for admin routes
+  if (!to.path.includes("/admin")) {
+    return;
+  }
+
   if (!user.value) {
     const {
       data: { session },
@@ -14,17 +19,17 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
   }
 
-  const routeSlug = to.params.slug;
+  const routeSlug = to.params.slug as string;
 
   const { data: business, error: businessError } = await supabase
     .from("business_profiles")
     .select("id, slug")
-    .eq("slug", routeSlug as string)
+    .eq("slug", routeSlug)
     .single();
 
+  // Redirect to /index if there is no existing business
   if (businessError || !business) {
-    console.error("Error al obtener el negocio:", businessError);
-    return navigateTo("/");
+    return navigateTo(`/`);
   }
 
   // Obtener el ID del usuario actual
@@ -38,20 +43,19 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     .eq("business_id", business.id)
     .maybeSingle();
 
-  if (memberError) {
-    console.error("Error al obtener el miembro:", memberError);
-    return navigateTo("/");
-  }
+  const siteIndex = `/business/${routeSlug}/site`;
 
-  if (!member) {
-    console.error("El usuario no es miembro de este negocio");
-    return navigateTo(`/business/${routeSlug}`);
+  // Redirect to the site/index page if there is not permission
+  if (memberError || !member) {
+    console.error("Error al obtener el miembro:", memberError);
+    return navigateTo(siteIndex);
   }
 
   const allowedRoles = ["owner"];
 
+  // Add the roles permitted, by now only "owner"
   if (!allowedRoles.includes(member.role || "")) {
-    console.warn("El usuario no tiene permisos suficientes");
-    return navigateTo(`/business/${routeSlug}`);
+    console.error("El usuario no tiene permisos suficientes");
+    return navigateTo(siteIndex);
   }
 });

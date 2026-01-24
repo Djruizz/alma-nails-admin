@@ -1,8 +1,12 @@
 <script setup lang="ts">
 const route = useRoute();
-const { data: business } = await useFetch(
+const { data: business, error } = await useFetch(
   `/api/business/public/${route.params.slug}`,
 );
+
+if (error.value || !business.value) {
+  navigateTo("/");
+}
 </script>
 <template>
   <div>

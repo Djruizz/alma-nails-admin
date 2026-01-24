@@ -9,34 +9,34 @@ export const useNavigation = () => {
   });
 
   // Generar la base de la ruta
-  const baseRoute = computed(() => {
-    return currentSlug.value ? `/business/${currentSlug.value}` : "/";
+  const baseAdminRoute = computed(() => {
+    return currentSlug.value ? `/business/${currentSlug.value}/admin` : "/";
   });
 
   const items = computed<NavigationMenuItem>(() => ({
     dashboard: {
       label: "Inicio",
-      to: `${baseRoute.value}/dashboard`,
+      to: `${baseAdminRoute.value}/dashboard`,
       icon: "i-lucide-house",
     },
     subscriptions: {
       label: "Clientes",
-      to: `${baseRoute.value}/clients`,
+      to: `${baseAdminRoute.value}/clients`,
       icon: "i-lucide-users",
     },
     analytics: {
       label: "Servicios",
-      to: `${baseRoute.value}/services`,
+      to: `${baseAdminRoute.value}/services`,
       icon: "i-lucide-sparkles",
     },
     calendar: {
       label: "Agenda",
-      to: `${baseRoute.value}/calendar`,
+      to: `${baseAdminRoute.value}/calendar`,
       icon: "i-lucide-calendar",
     },
     settings: {
       label: "Configuración",
-      to: `${baseRoute.value}/settings`,
+      to: `${baseAdminRoute.value}/settings`,
       icon: "i-lucide-settings",
     },
   }));
@@ -62,6 +62,6 @@ export const useNavigation = () => {
     desktopMenu,
     mobileMenu,
     settingsButton,
-    baseRoute,
+    baseAdminRoute,
   };
 };

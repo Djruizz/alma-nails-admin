@@ -1,6 +1,5 @@
 <script setup lang="ts">
 definePageMeta({
-  middleware: "is-owner",
   layout: "admin",
 });
 import type { TabsItem } from "@nuxt/ui";
@@ -26,7 +25,7 @@ const items: TabsItem[] = [
   },
 ];
 const activeTab = ref<string>(
-  localStorage.getItem("settingsTabSelected") ?? "general"
+  localStorage.getItem("settingsTabSelected") ?? "general",
 );
 
 // persistencia automática
