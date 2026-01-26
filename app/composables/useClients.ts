@@ -21,20 +21,20 @@ export const useClients = () => {
   };
 
   const fetchClient = async (id: string): Promise<ClientWithProfile | null> => {
-    const existing = clients.value.find(c => c.id === id)
-    if (existing) return existing
-  
+    const existing = clients.value.find((c) => c.id === id);
+    if (existing) return existing;
+
     try {
-      setLoading(true)
+      setLoading(true);
       const { data } = await useAsyncData<ClientWithProfile>(
         `client-${id}`,
-        () => $fetch<ClientWithProfile>(`/api/clients/${id}`)
-      )
-      return data.value ?? null
+        () => $fetch<ClientWithProfile>(`/api/clients/${id}`),
+      );
+      return data.value ?? null;
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const createClient = async (data: ClientSchema) => {
     try {
@@ -59,7 +59,7 @@ export const useClients = () => {
         body: data,
       });
       clients.value = clients.value.map((client) =>
-        client.id === id ? res : client
+        client.id === id ? res : client,
       );
     } finally {
       setLoading(false);
@@ -72,7 +72,6 @@ export const useClients = () => {
       await $fetch(`/api/clients/${id}`, {
         method: "DELETE",
       });
-      clients.value = clients.value.filter((client) => client.id !== id);
     } finally {
       setLoading(false);
     }

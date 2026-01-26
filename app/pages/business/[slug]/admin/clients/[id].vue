@@ -12,7 +12,7 @@ const { client, clientNotes, clientBirthday, deleteClientById } =
       <div class="flex justify-between items-center">
         <div>
           <h1 class="text-xl font-semibold">
-            {{ client?.full_name }}
+            {{ client?.display_full_name }}
           </h1>
           <p class="text-sm">
             Desde el {{ formatDate(client?.created_at ?? "") }}
@@ -31,13 +31,13 @@ const { client, clientNotes, clientBirthday, deleteClientById } =
           <span class="flex items-center gap-2 text-gray-500">
             <UIcon name="i-lucide-phone" size="20" /> Numero:
           </span>
-          {{ client?.phone }}
+          {{ client?.display_phone }}
         </div>
         <div class="flex justify-between items-center">
           <span class="flex items-center gap-2 text-gray-500">
             <UIcon name="i-lucide-mail" size="20" /> Email:
           </span>
-          {{ client?.email }}
+          {{ client?.display_email }}
         </div>
         <div class="flex justify-between items-center">
           <span class="flex items-center gap-2 text-gray-500">

@@ -97,6 +97,9 @@ export type Database = {
           business_id: string
           created_at: string
           id: string
+          internal_email: string | null
+          internal_name: string
+          internal_phone: string | null
           is_active: boolean
           notes: string | null
           user_id: string
@@ -105,6 +108,9 @@ export type Database = {
           business_id: string
           created_at?: string
           id?: string
+          internal_email?: string | null
+          internal_name: string
+          internal_phone?: string | null
           is_active: boolean
           notes?: string | null
           user_id: string
@@ -113,6 +119,9 @@ export type Database = {
           business_id?: string
           created_at?: string
           id?: string
+          internal_email?: string | null
+          internal_name?: string
+          internal_phone?: string | null
           is_active?: boolean
           notes?: string | null
           user_id?: string
@@ -234,6 +243,7 @@ export type Database = {
         Row: {
           born_date: string | null
           created_at: string
+          email: string
           full_name: string
           id: string
           phone: string | null
@@ -241,6 +251,7 @@ export type Database = {
         Insert: {
           born_date?: string | null
           created_at?: string
+          email: string
           full_name: string
           id?: string
           phone?: string | null
@@ -248,6 +259,7 @@ export type Database = {
         Update: {
           born_date?: string | null
           created_at?: string
+          email?: string
           full_name?: string
           id?: string
           phone?: string | null
@@ -372,12 +384,13 @@ export type Database = {
           born_date: string | null
           business_id: string | null
           created_at: string | null
-          email: string | null
-          full_name: string | null
+          display_email: string | null
+          display_full_name: string | null
+          display_phone: string | null
           id: string | null
           is_active: boolean | null
+          is_registered: boolean | null
           notes: string | null
-          phone: string | null
         }
         Relationships: [
           {
