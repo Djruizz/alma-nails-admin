@@ -26,11 +26,19 @@ const {
             Desde el {{ formatDate(client?.created_at ?? "") }}
           </p>
         </div>
-        <UBadge
-          :label="client?.is_active ? 'Activo' : 'Inactivo'"
-          :color="client?.is_active ? 'success' : 'error'"
-          variant="subtle"
-        />
+        <div class="flex flex-col justify-center items-center gap-2">
+          <UBadge
+            :label="client?.is_registered ? 'Registrado' : 'No Registrado'"
+            :color="client?.is_registered ? 'primary' : 'neutral'"
+            variant="subtle"
+          />
+          <USwitch
+            v-model="clientDataState.is_active"
+            class="flex items-center"
+            color="success"
+            :label="clientDataState.is_active ? 'Activo' : 'Inactivo'"
+          />
+        </div>
       </div>
     </template>
     <template #default>

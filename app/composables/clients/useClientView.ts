@@ -42,13 +42,15 @@ export const useClientView = () => {
 
   const initialState = shallowRef<ClientUpdateSchema>({
     notes: "",
+    is_active: false,
   });
-  const fields: (keyof ClientUpdateSchema)[] = ["notes"];
+  const fields: (keyof ClientUpdateSchema)[] = ["notes", "is_active"];
   const clientDataState = reactive<ClientUpdateSchema>(initialState.value);
   watch(client, (c) => {
     if (!c) return;
     const clientData: ClientUpdateSchema = {
       notes: c.notes || "",
+      is_active: c.is_active || false,
     };
     Object.assign(clientDataState, clientData);
     initialState.value = structuredClone(toRaw(clientData));
@@ -86,6 +88,8 @@ export const useClientView = () => {
     if (!hasChanges.value) return;
     try {
       await updateClient(clientId, clientDataState);
+      initialState.value = structuredClone(toRaw(clientDataState));
+
       toast.add({
         title: "Cliente actualizado",
         description: "La información del cliente fue actualizada",
