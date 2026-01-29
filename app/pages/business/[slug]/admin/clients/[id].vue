@@ -2,8 +2,16 @@
 definePageMeta({
   layout: "admin",
 });
-const { client, clientNotes, clientBirthday, deleteClientById } =
-  useClientView();
+const {
+  client,
+  clientDataState,
+  clientBirthday,
+  hasChanges,
+  canceling,
+  reset,
+  deleteClientById,
+  updateClientData,
+} = useClientView();
 </script>
 <template>
   <UiGoBackButton label="Regresar" />
@@ -46,9 +54,23 @@ const { client, clientNotes, clientBirthday, deleteClientById } =
           {{ clientBirthday }}
         </div>
       </div>
-      <UFormField label="Notas:" class="w-full pt-2">
-        <UTextarea v-model="clientNotes" class="w-full" />
-      </UFormField>
+      <UForm
+        :state="clientDataState"
+        :schema="clientUpdateSchema"
+        @submit="updateClientData"
+        class="w-full"
+      >
+        <UFormField label="Notas:" class="w-full pt-2" name="notes">
+          <UTextarea v-model="clientDataState.notes" class="w-full" />
+        </UFormField>
+        <UiFormActionButtons
+          class="pt-4"
+          :hasChanges="hasChanges"
+          submit-label="Guardar"
+          :canceling="canceling"
+          @reset="reset"
+        />
+      </UForm>
     </template>
     <template #footer>
       <UButton

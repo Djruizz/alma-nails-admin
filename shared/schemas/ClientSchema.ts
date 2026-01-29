@@ -17,7 +17,7 @@ export const clientSchema = z
 
 export const clientUpdateSchema = z
   .object({
-    notes: z.string().optional().nullable(),
+    notes: z.string().trim().optional(),
   })
   .strict();
 

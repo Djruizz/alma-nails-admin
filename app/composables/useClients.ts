@@ -28,7 +28,7 @@ export const useClients = () => {
       setLoading(true);
       const { data } = await useAsyncData<ClientWithProfile>(
         `client-${id}`,
-        () => $fetch<ClientWithProfile>(`/api/clients/${id}`),
+        () => $fetch<ClientWithProfile>(`/api/clients/${id}`)
       );
       return data.value ?? null;
     } finally {
@@ -59,7 +59,7 @@ export const useClients = () => {
         body: data,
       });
       clients.value = clients.value.map((client) =>
-        client.id === id ? res : client,
+        client.id === id ? { ...client, ...res } : client
       );
     } finally {
       setLoading(false);

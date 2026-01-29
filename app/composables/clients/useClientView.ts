@@ -1,5 +1,5 @@
 export const useClientView = () => {
-  const { fetchClient, deleteClient } = useClients();
+  const { fetchClient, deleteClient, updateClient } = useClients();
   const route = useRoute();
   const { baseAdminRoute } = useNavigation();
   const clientId = route.params.id?.toString();
@@ -40,11 +40,19 @@ export const useClientView = () => {
     }
   };
 
-  onMounted(() => {
-    getClient();
+  const initialState = shallowRef<ClientUpdateSchema>({
+    notes: "",
   });
-
-  const clientNotes = computed(() => client.value?.notes ?? "Sin notas");
+  const fields: (keyof ClientUpdateSchema)[] = ["notes"];
+  const clientDataState = reactive<ClientUpdateSchema>(initialState.value);
+  watch(client, (c) => {
+    if (!c) return;
+    const clientData: ClientUpdateSchema = {
+      notes: c.notes || "",
+    };
+    Object.assign(clientDataState, clientData);
+    initialState.value = structuredClone(toRaw(clientData));
+  });
 
   const clientBirthday = computed(() => {
     if (!client.value?.born_date) return "Fecha no disponible";
@@ -68,12 +76,55 @@ export const useClientView = () => {
       });
     }
   };
+  const hasChanges = computed(() => {
+    if (!initialState.value) return false;
+    return fields.some(
+      (field) => clientDataState[field] !== initialState.value?.[field]
+    );
+  });
+  const updateClientData = async () => {
+    if (!hasChanges.value) return;
+    try {
+      await updateClient(clientId, clientDataState);
+      toast.add({
+        title: "Cliente actualizado",
+        description: "La información del cliente fue actualizada",
+        color: "success",
+        icon: "i-lucide-check",
+      });
+    } catch {
+      toast.add({
+        title: "Error",
+        description: "Error al actualizar la información del cliente",
+        color: "error",
+        icon: "i-lucide-x",
+      });
+    }
+  };
+  const canceling = ref<boolean>(false);
+  const reset = () => {
+    canceling.value = true;
+    setTimeout(() => {
+      if (!initialState.value) return;
+      Object.assign(
+        clientDataState,
+        structuredClone(toRaw(initialState.value))
+      );
+      canceling.value = false;
+    }, 300);
+  };
+
+  getClient();
 
   return {
     client,
-    clientNotes,
+    hasChanges,
+    clientDataState,
     clientBirthday,
+    canceling,
+    reset,
     deleteClientById,
+    updateClientData,
     refresh: getClient,
   };
 };
