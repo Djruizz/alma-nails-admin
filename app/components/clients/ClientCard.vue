@@ -26,16 +26,14 @@ const props = defineProps<{
             :color="client.is_active ? 'success' : 'neutral'"
             variant="subtle"
             size="md"
-          >
-            {{ client.is_active ? "Activo" : "Inactivo" }}
-          </UBadge>
+            :label="client.is_active ? 'Activo' : 'Inactivo'"
+          />
           <UBadge
-            :color="client.is_registered ? 'primary' : 'neutral'"
+            :color="client.is_registered ? 'primary' : 'warning'"
             variant="subtle"
             size="md"
-          >
-            {{ client.is_registered ? "Registrado" : "No registrado" }}
-          </UBadge>
+            :label="client.is_registered ? 'Registrado' : 'No registrado'"
+          />
         </div>
       </div>
     </template>

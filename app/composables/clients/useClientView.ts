@@ -68,20 +68,27 @@ export const useClientView = () => {
   const deleteClientById = async () => {
     try {
       await deleteClient(clientId);
-      await navigateTo(`${baseAdminRoute.value}/clients`);
+      toast.add({
+        title: "Cliente eliminado",
+        description: "El cliente fue eliminado correctamente",
+        color: "success",
+        icon: "i-lucide-check",
+      });
     } catch (e: any) {
       toast.add({
-        title: "Error",
-        description: "Error al eliminar el cliente",
+        title: "Error al eliminar el cliente",
+        description: e.statusMessage,
         color: "error",
         icon: "i-lucide-x",
       });
+    } finally {
+      await navigateTo(`${baseAdminRoute.value}/clients`);
     }
   };
   const hasChanges = computed(() => {
     if (!initialState.value) return false;
     return fields.some(
-      (field) => clientDataState[field] !== initialState.value?.[field]
+      (field) => clientDataState[field] !== initialState.value?.[field],
     );
   });
   const updateClientData = async () => {
@@ -112,7 +119,7 @@ export const useClientView = () => {
       if (!initialState.value) return;
       Object.assign(
         clientDataState,
-        structuredClone(toRaw(initialState.value))
+        structuredClone(toRaw(initialState.value)),
       );
       canceling.value = false;
     }, 300);

@@ -1,10 +1,12 @@
 <script setup lang="ts">
-interface ServiceDeleteModalProps {
+interface ConfirmDeleteModalProps {
   isOpen: boolean;
-  service: Service | null;
+  modalTitle?: string;
+  modalDescription?: string;
+  modalButtonLabel?: string;
 }
 
-const props = defineProps<ServiceDeleteModalProps>();
+const props = defineProps<ConfirmDeleteModalProps>();
 
 const emit = defineEmits<{
   close: [];
@@ -15,12 +17,12 @@ const emit = defineEmits<{
 <template>
   <UModal
     :open="isOpen"
-    title="Eliminar Servicio"
-    description="Esta acción no se puede deshacer"
+    :title="modalTitle || 'Eliminar'"
+    description="Confirmar eliminación"
     @update:open="(value) => !value && emit('close')"
   >
     <template #body>
-      <div v-if="service" class="space-y-4">
+      <div class="space-y-4">
         <!-- Warning Banner -->
         <div
           class="flex items-start gap-3 p-4 rounded-lg bg-error-50 dark:bg-error-950/20 border border-error-200 dark:border-error-800"
@@ -31,7 +33,10 @@ const emit = defineEmits<{
           />
           <div class="flex-1">
             <p class="text-sm font-medium text-error-900 dark:text-error-100">
-              ¿Estás seguro de que deseas eliminar este servicio?
+              {{
+                modalDescription ||
+                "¿Estás seguro de que deseas eliminar este elemento?"
+              }}
             </p>
             <p class="text-sm text-error-700 dark:text-error-300 mt-1">
               Esta acción es permanente y no se puede deshacer.
@@ -39,8 +44,9 @@ const emit = defineEmits<{
           </div>
         </div>
 
-        <!-- Service Details Card -->
-        <ServicesServiceCard :service="service" :show-actions="false" />
+        <div>
+          <slot></slot>
+        </div>
       </div>
     </template>
 
@@ -55,7 +61,7 @@ const emit = defineEmits<{
         <UButton
           color="error"
           icon="i-lucide-trash-2"
-          label="Eliminar Servicio"
+          :label="modalButtonLabel || 'Eliminar'"
           @click="
             emit('confirm');
             close();

@@ -31,7 +31,7 @@ const { business } = useBusiness();
         @click="deleteSocialLink(link.id)"
       />
     </UFieldGroup>
-    <SettingsFormActionButtons
+    <UiFormActionButtons
       :has-changes="hasChanges"
       :canceling="isCanceling"
       submit-label="Guardar"

@@ -83,11 +83,17 @@ onMounted(async () => {
     <ServicesServiceModal />
 
     <!-- Delete Confirmation Modal -->
-    <ServicesServiceDeleteModal
+    <SharedConfirmDeleteModal
       :is-open="isDeleteModalOpen"
-      :service="deletingService"
+      modal-title="Eliminar Servicio"
+      modal-description="¿Estás seguro de que deseas eliminar este servicio?"
+      modal-button-label="Eliminar Servicio"
       @close="closeDeleteModal"
       @confirm="handleDelete"
-    />
+    >
+      <div v-if="deletingService">
+        <ServicesServiceCard :service="deletingService" :show-actions="false" />
+      </div>
+    </SharedConfirmDeleteModal>
   </UContainer>
 </template>
