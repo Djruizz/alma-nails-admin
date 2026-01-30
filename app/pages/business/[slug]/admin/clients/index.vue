@@ -10,6 +10,7 @@ onMounted(async () => {
 const navigateToClient = (id: string) => {
   navigateTo(`${baseAdminRoute.value}/clients/${id}`);
 };
+const searchQuery = ref("");
 </script>
 
 <template>
@@ -38,12 +39,27 @@ const navigateToClient = (id: string) => {
         </UDropdownMenu>
       </div>
       <USeparator />
-      <ClientsClientCard
-        v-for="client in clients"
-        :key="client.id ?? ''"
-        :client="client"
-        @click="navigateToClient(client.id ?? '')"
-      />
+      <div v-if="clients.length > 0">
+        <ClientsClientCard
+          v-for="client in clients"
+          :key="client.id ?? ''"
+          :client="client"
+          @click="navigateToClient(client.id ?? '')"
+        />
+      </div>
+      <div v-else>
+        <UAlert
+          title="No hay clientes"
+          :description="
+            searchQuery
+              ? 'No se encontraron clientes con esa búsqueda'
+              : 'No tienes clientes registrados'
+          "
+          color="neutral"
+          variant="subtle"
+          icon="i-lucide-info"
+        />
+      </div>
     </div>
   </UContainer>
 </template>
