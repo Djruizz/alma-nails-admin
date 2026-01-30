@@ -12,6 +12,8 @@ const {
   deleteClientById,
   updateClientData,
 } = useClientView();
+
+const openDeleteModal = ref(false);
 </script>
 <template>
   <UiGoBackButton label="Regresar" />
@@ -29,13 +31,13 @@ const {
         <div class="flex flex-col justify-center items-center gap-2">
           <UBadge
             :label="client?.is_registered ? 'Registrado' : 'No Registrado'"
-            :color="client?.is_registered ? 'primary' : 'neutral'"
+            :color="client?.is_registered ? 'primary' : 'warning'"
             variant="subtle"
           />
           <USwitch
             v-model="clientDataState.is_active"
             class="flex items-center"
-            color="success"
+            color="primary"
             :label="clientDataState.is_active ? 'Activo' : 'Inactivo'"
           />
         </div>
@@ -47,19 +49,19 @@ const {
           <span class="flex items-center gap-2 text-gray-500">
             <UIcon name="i-lucide-phone" size="20" /> Numero:
           </span>
-          {{ client?.display_phone }}
+          {{ client?.display_phone || "No disponible" }}
         </div>
         <div class="flex justify-between items-center">
           <span class="flex items-center gap-2 text-gray-500">
             <UIcon name="i-lucide-mail" size="20" /> Email:
           </span>
-          {{ client?.display_email }}
+          {{ client?.display_email || "No disponible" }}
         </div>
         <div class="flex justify-between items-center">
           <span class="flex items-center gap-2 text-gray-500">
             <UIcon name="i-lucide-calendar" size="20" /> Fecha de nacimiento:
           </span>
-          {{ clientBirthday }}
+          {{ clientBirthday || "No disponible" }}
         </div>
       </div>
       <UForm
@@ -80,10 +82,10 @@ const {
         />
       </UForm>
     </template>
-    <template #footer>
+    <template #footer v-if="!client?.is_registered">
       <UButton
         label="Borrar cliente"
-        @click="deleteClientById()"
+        @click="openDeleteModal = true"
         color="error"
         variant="subtle"
       />
@@ -98,4 +100,14 @@ const {
       </div>
     </template>
   </UCard>
+  <SharedConfirmDeleteModal
+    :is-open="openDeleteModal"
+    modal-title="Eliminar Cliente"
+    modal-description="¿Estás seguro de que deseas eliminar este cliente?"
+    modal-button-label="Eliminar Cliente"
+    @close="openDeleteModal = false"
+    @confirm="deleteClientById()"
+  >
+    <ClientsClientCard v-if="client" :client="client" />
+  </SharedConfirmDeleteModal>
 </template>
