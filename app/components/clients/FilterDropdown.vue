@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
-const { sortByItems, checkedIconStyle } = useSortBy();
-const { sortClients } = useClients();
+const { sortByItems, checkedIconStyle, applyFilters } = useSortBy();
 </script>
 <template>
   <UDropdownMenu
@@ -34,7 +33,7 @@ const { sortClients } = useClients();
         color="primary"
         variant="subtle"
         class="mx-auto px-5"
-        @click="sortClients()"
+        @click="applyFilters()"
       />
     </template>
   </UDropdownMenu>

@@ -19,7 +19,6 @@ export const useSortBy = () => {
       },
     });
   };
-  updateQuery();
   const setOrderBy = (field: string) => {
     if (clientFilters.value.sort === field) {
       clientFilters.value.direction = !clientFilters.value.direction;
@@ -30,10 +29,11 @@ export const useSortBy = () => {
         status: clientFilters.value.status,
       };
     }
+    // updateQuery();
   };
   const setStatus = (value: string) => {
     clientFilters.value.status = value;
-    updateQuery();
+    // updateQuery();
   };
   const checkedIconStyle = computed(() => {
     return clientFilters.value.direction ? "" : "rotate-180";
@@ -87,11 +87,17 @@ export const useSortBy = () => {
     ],
   ]);
   const { sortClients } = useClients();
-  const applyActions = () => {
+  const applyFilters = () => {
     updateQuery();
-    sortClients();
-    clientFilters.value = initialClientFilters.value;
+    initialClientFilters.value = { ...clientFilters.value };
   };
+  watch(
+    () => route.query,
+    async () => {
+      await sortClients();
+    },
+    { deep: true },
+  );
 
   return {
     open,
@@ -99,7 +105,7 @@ export const useSortBy = () => {
     sortByItems,
     checkedIconStyle,
     setOrderBy,
-    applyActions,
+    applyFilters,
   };
 };
 const orderFields = [
