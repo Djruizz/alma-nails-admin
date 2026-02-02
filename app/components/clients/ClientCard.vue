@@ -14,7 +14,7 @@ const props = defineProps<{
           >
             {{ client.display_full_name ?? "" }}
             <span class="text-sm text-neutral-500">
-              - {{ client.display_phone ?? "" }}
+              - {{ client.display_phone ?? "Sin número" }}
             </span>
           </h3>
           <span class="text-sm text-neutral-500"

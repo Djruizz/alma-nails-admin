@@ -2,17 +2,47 @@ export const useClients = () => {
   const clients = useState<ClientWithProfile[]>("clients", () => []);
   const { setLoading } = useLoading();
 
-  const fetchClients = async (forceRefresh = false, searchTerm?: string) => {
+  const getFilters = () => {
+    const route = useRoute();
+    const sort = route.query.sort as string | undefined;
+    const direction = route.query.direction as string | undefined;
+    const status = route.query.status as string | undefined;
+    if (status === "all" || !status) {
+      return { sort, direction };
+    }
+    return { sort, direction, isActive: status === "active" };
+  };
+
+  const fetchClients = async (forceRefresh = false) => {
     // Skip fetch if clients already loaded and not forcing refresh and no search term
-    if (clients.value.length > 0 && !forceRefresh && !searchTerm) return;
+    const { sort, direction, isActive } = getFilters();
+    if (clients.value.length > 0 && !forceRefresh) return;
 
     try {
       setLoading(true);
-      const url = searchTerm
-        ? `/api/clients?search=${encodeURIComponent(searchTerm)}`
-        : "/api/clients";
-      const res: ClientWithProfile[] = await $fetch(url, {
+      const { data } = await useFetch<ClientWithProfile[]>("/api/clients", {
+        query: {
+          sort,
+          direction,
+          isActive,
+        },
+      });
+      clients.value = data.value ?? [];
+    } finally {
+      setLoading(false);
+    }
+  };
+  const sortClients = async () => {
+    const { sort, direction, isActive } = getFilters();
+    try {
+      setLoading(true);
+      const res = await $fetch<ClientWithProfile[]>("/api/clients", {
         method: "GET",
+        query: {
+          sort,
+          direction,
+          isActive,
+        },
       });
       clients.value = res;
     } finally {
@@ -92,6 +122,7 @@ export const useClients = () => {
   return {
     clients,
     fetchClients,
+    sortClients,
     fetchClient,
     createClient,
     updateClient,

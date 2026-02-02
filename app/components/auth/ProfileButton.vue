@@ -88,15 +88,9 @@ const userItems = ref<DropdownMenuItem[]>([
         class="gap-0"
       />
     </UButton>
-    <template #name-trailing>
-      <UBadge
-        v-if="profile?.role"
-        :label="profile?.role"
-        :color="profile?.role === 'admin' ? 'primary' : 'neutral'"
-      />
-    </template>
+
     <template #email-label>
-      <div class="max-w-36 truncate">{{ email }}aaaaaaaaa</div>
+      <div class="max-w-36 truncate">{{ email }}</div>
     </template>
     <template #color-mode-trailing>
       <UColorModeSwitch size="lg" @click.stop />

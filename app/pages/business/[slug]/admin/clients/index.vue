@@ -4,8 +4,9 @@ definePageMeta({
 });
 const { baseAdminRoute } = useNavigation();
 const { clients, fetchClients } = useClients();
+const { clientFilters } = useSortBy();
 onMounted(async () => {
-  await fetchClients();
+  await fetchClients(false);
 });
 const navigateToClient = (id: string) => {
   navigateTo(`${baseAdminRoute.value}/clients/${id}`);
@@ -22,24 +23,25 @@ const searchQuery = ref("");
         </h1>
         <p class="text-gray-500">Gestiona tus clientes y suscripciones</p>
       </div>
-      <div class="grid grid-cols-3 gap-4">
+      <div class="flex gap-4">
         <UInput
           placeholder="Buscar cliente"
           icon="i-lucide-search"
-          class="col-span-2"
-          size="lg"
+          class="flex-1"
+          size="md"
         />
-        <UDropdownMenu>
-          <UButton
-            label="Ordenar"
-            icon="i-lucide-filter"
-            variant="subtle"
-            color="neutral"
-          />
-        </UDropdownMenu>
+        <ClientsFilterDropdown />
       </div>
       <USeparator />
-      <div v-if="clients.length > 0">
+      <div class="flex justify-between">
+        <UBadge color="neutral" variant="subtle">
+          <p>Clientes encontrados: {{ clients.length }}</p>
+        </UBadge>
+        <UButton icon="i-lucide-plus" variant="subtle" color="neutral">
+          <span class="hidden sm:block">Crear cliente</span>
+        </UButton>
+      </div>
+      <div v-if="clients.length > 0" class="space-y-4">
         <ClientsClientCard
           v-for="client in clients"
           :key="client.id ?? ''"
@@ -50,11 +52,7 @@ const searchQuery = ref("");
       <div v-else>
         <UAlert
           title="No hay clientes"
-          :description="
-            searchQuery
-              ? 'No se encontraron clientes con esa búsqueda'
-              : 'No tienes clientes registrados'
-          "
+          description="No se encontraron clientes"
           color="neutral"
           variant="subtle"
           icon="i-lucide-info"
