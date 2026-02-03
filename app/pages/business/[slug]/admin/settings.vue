@@ -25,12 +25,12 @@ const items: TabsItem[] = [
   },
 ];
 const activeTab = ref<string>(
-  localStorage.getItem("settingsTabSelected") ?? "general",
+  sessionStorage.getItem("settingsTabSelected") ?? "general",
 );
 
 // persistencia automática
 watch(activeTab, (tab) => {
-  localStorage.setItem("settingsTabSelected", tab);
+  sessionStorage.setItem("settingsTabSelected", tab);
 });
 </script>
 
