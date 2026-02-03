@@ -1,8 +1,9 @@
 import type { DropdownMenuItem } from "@nuxt/ui";
 
-export const useSortBy = () => {
+export const useFilters = () => {
   const router = useRouter();
   const route = useRoute();
+
   const initialClientFilters = useState("clientFilters", () => ({
     sort: route.query.sort || "created_at",
     direction: route.query.direction === "asc",
@@ -86,24 +87,31 @@ export const useSortBy = () => {
       },
     ],
   ]);
-  const { sortClients } = useClients();
   const applyFilters = () => {
     updateQuery();
     initialClientFilters.value = { ...clientFilters.value };
   };
-  watch(
-    () => route.query,
-    async () => {
-      await sortClients();
-    },
-    { deep: true },
-  );
+
+  let timer: NodeJS.Timeout;
+  const searchInput = ref("");
+  watch(searchInput, () => {
+    clearTimeout(timer);
+    timer = setTimeout(async () => {
+      router.push({
+        query: {
+          ...route.query,
+          search: searchInput.value,
+        },
+      });
+    }, 700);
+  });
 
   return {
     open,
     clientFilters,
     sortByItems,
     checkedIconStyle,
+    searchInput,
     setOrderBy,
     applyFilters,
   };

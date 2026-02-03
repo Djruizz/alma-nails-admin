@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
-const { sortByItems, checkedIconStyle, applyFilters } = useSortBy();
+const { sortByItems, checkedIconStyle, applyFilters } = useFilters();
 </script>
 <template>
   <UDropdownMenu

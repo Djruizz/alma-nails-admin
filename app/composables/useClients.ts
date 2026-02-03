@@ -7,15 +7,16 @@ export const useClients = () => {
     const sort = route.query.sort as string | undefined;
     const direction = route.query.direction as string | undefined;
     const status = route.query.status as string | undefined;
+    const search = route.query.search as string | undefined;
     if (status === "all" || !status) {
-      return { sort, direction };
+      return { sort, direction, search };
     }
-    return { sort, direction, isActive: status === "active" };
+    return { sort, direction, isActive: status === "active", search };
   };
 
   const fetchClients = async (forceRefresh = false) => {
     // Skip fetch if clients already loaded and not forcing refresh and no search term
-    const { sort, direction, isActive } = getFilters();
+    const { sort, direction, isActive, search } = getFilters();
     if (clients.value.length > 0 && !forceRefresh) return;
 
     try {
@@ -25,6 +26,7 @@ export const useClients = () => {
           sort,
           direction,
           isActive,
+          search,
         },
       });
       clients.value = data.value ?? [];
@@ -33,7 +35,7 @@ export const useClients = () => {
     }
   };
   const sortClients = async () => {
-    const { sort, direction, isActive } = getFilters();
+    const { sort, direction, isActive, search } = getFilters();
     try {
       setLoading(true);
       const res = await $fetch<ClientWithProfile[]>("/api/clients", {
@@ -42,6 +44,7 @@ export const useClients = () => {
           sort,
           direction,
           isActive,
+          search,
         },
       });
       clients.value = res;

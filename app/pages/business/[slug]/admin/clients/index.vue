@@ -3,15 +3,25 @@ definePageMeta({
   layout: "admin",
 });
 const { baseAdminRoute } = useNavigation();
-const { clients, fetchClients } = useClients();
-const { clientFilters } = useSortBy();
+const { clients, fetchClients, sortClients } = useClients();
+const { searchInput } = useFilters();
+
 onMounted(async () => {
   await fetchClients(false);
 });
+
 const navigateToClient = (id: string) => {
   navigateTo(`${baseAdminRoute.value}/clients/${id}`);
 };
-const searchQuery = ref("");
+
+const route = useRoute();
+watch(
+  () => route.query,
+  async () => {
+    await sortClients();
+  },
+  { deep: true },
+);
 </script>
 
 <template>
@@ -25,6 +35,7 @@ const searchQuery = ref("");
       </div>
       <div class="flex gap-4">
         <UInput
+          v-model="searchInput"
           placeholder="Buscar cliente"
           icon="i-lucide-search"
           class="flex-1"
