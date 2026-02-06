@@ -69,15 +69,13 @@ export const useClients = () => {
     }
   };
 
-  const createClient = async (data: ClientSchema) => {
+  const createClient = async (data: NewClientSchema) => {
     try {
       setLoading(true);
       const res: ClientWithProfile = await $fetch("/api/clients", {
         method: "POST",
         body: data,
       });
-      // Add the new client to the beginning of the array
-      clients.value = [res, ...clients.value];
       return res;
     } finally {
       setLoading(false);

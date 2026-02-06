@@ -1,17 +1,11 @@
 import { z } from "zod";
-
-export const clientSchema = z
+import { phoneSchema, nameSchema } from "./Standard/Schemas";
+export const newClientSchema = z
   .object({
-    full_name: z.string().min(1, "El nombre completo es requerido"),
-    phone: z
-      .string()
-      .min(10, "El teléfono debe tener al menos 10 dígitos")
-      .regex(
-        /^[0-9+\-\s()]*$/,
-        "El teléfono solo puede contener números y símbolos válidos"
-      ),
+    internal_name: nameSchema,
+    internal_phone: phoneSchema,
     notes: z.string().optional().nullable(),
-    user_id: z.uuid("El ID de usuario debe ser válido"),
+    is_active: z.boolean().default(true),
   })
   .strict();
 
@@ -22,5 +16,5 @@ export const clientUpdateSchema = z
   })
   .strict();
 
-export type ClientSchema = z.infer<typeof clientSchema>;
+export type NewClientSchema = z.infer<typeof newClientSchema>;
 export type ClientUpdateSchema = z.infer<typeof clientUpdateSchema>;

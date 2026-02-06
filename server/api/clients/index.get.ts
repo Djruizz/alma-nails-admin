@@ -22,7 +22,7 @@ export default defineEventHandler(
         ascending: sort_order === "asc",
       });
     }
-    if (isActive) {
+    if (isActive !== undefined) {
       queryBuilder = queryBuilder.eq("is_active", isActive);
     }
 

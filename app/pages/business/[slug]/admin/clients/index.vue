@@ -5,16 +5,30 @@ definePageMeta({
 const { baseAdminRoute } = useNavigation();
 const { clients, fetchClients, sortClients } = useClients();
 const { searchInput } = useFilters();
+const router = useRouter();
+const route = useRoute();
 
 onMounted(async () => {
-  await fetchClients(false);
+  if (
+    !route.query.sort &&
+    !route.query.direction &&
+    !route.query.status &&
+    !route.query.search
+  ) {
+    router.push({
+      query: {
+        sort: "created_at",
+        direction: "desc",
+        status: "all",
+      },
+    });
+  }
 });
 
 const navigateToClient = (id: string) => {
   navigateTo(`${baseAdminRoute.value}/clients/${id}`);
 };
 
-const route = useRoute();
 watch(
   () => route.query,
   async () => {
@@ -48,7 +62,12 @@ watch(
         <UBadge color="neutral" variant="subtle">
           <p>Clientes encontrados: {{ clients.length }}</p>
         </UBadge>
-        <UButton icon="i-lucide-plus" variant="subtle" color="neutral">
+        <UButton
+          icon="i-lucide-plus"
+          variant="subtle"
+          color="neutral"
+          @click="navigateToClient('create')"
+        >
           <span class="hidden sm:block">Crear cliente</span>
         </UButton>
       </div>

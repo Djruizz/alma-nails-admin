@@ -1,5 +1,5 @@
 import { serverSupabaseClient } from "#supabase/server";
-import { clientSchema } from "@@/shared/schemas/ClientSchema";
+import { newClientSchema } from "@@/shared/schemas/ClientSchema";
 import type { Client } from "@@/shared/types/client.types";
 
 export default defineEventHandler(async (event): Promise<Client> => {
@@ -7,7 +7,7 @@ export default defineEventHandler(async (event): Promise<Client> => {
 
   const body = await readBody(event);
 
-  const validatedData = clientSchema.safeParse(body);
+  const validatedData = newClientSchema.safeParse(body);
   if (!validatedData.success) {
     throw createError({
       statusCode: 400,

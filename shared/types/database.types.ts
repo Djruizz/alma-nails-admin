@@ -102,7 +102,7 @@ export type Database = {
           internal_phone: string | null
           is_active: boolean
           notes: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           business_id: string
@@ -113,7 +113,7 @@ export type Database = {
           internal_phone?: string | null
           is_active: boolean
           notes?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           business_id?: string
@@ -124,7 +124,7 @@ export type Database = {
           internal_phone?: string | null
           is_active?: boolean
           notes?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
