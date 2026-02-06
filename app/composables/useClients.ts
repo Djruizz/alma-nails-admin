@@ -76,6 +76,7 @@ export const useClients = () => {
         method: "POST",
         body: data,
       });
+      await fetchClients(true);
       return res;
     } finally {
       setLoading(false);

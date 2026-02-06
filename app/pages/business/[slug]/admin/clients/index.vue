@@ -8,22 +8,7 @@ const { searchInput } = useFilters();
 const router = useRouter();
 const route = useRoute();
 
-onMounted(async () => {
-  if (
-    !route.query.sort &&
-    !route.query.direction &&
-    !route.query.status &&
-    !route.query.search
-  ) {
-    router.push({
-      query: {
-        sort: "created_at",
-        direction: "desc",
-        status: "all",
-      },
-    });
-  }
-});
+// onMounted logic removed - handled by useFilters sync
 
 const navigateToClient = (id: string) => {
   navigateTo(`${baseAdminRoute.value}/clients/${id}`);
@@ -64,8 +49,8 @@ watch(
         </UBadge>
         <UButton
           icon="i-lucide-plus"
-          variant="subtle"
-          color="neutral"
+          variant="solid"
+          color="primary"
           @click="navigateToClient('create')"
         >
           <span class="hidden sm:block">Crear cliente</span>
